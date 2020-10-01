@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-01T02:14:12.138441+00:00",
+  "timestamp": "2020-10-01T20:39:15.403571+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4010,7 +4010,7 @@
       "labels": [],
       "body": "From @marka63:\r\n\r\nSection 2.4.1.  AliasMode paragraph 2.  Why have \"MUST NOT\" here?                         \r\n\r\n   The primary purpose of AliasMode is to allow aliasing at the zone\r\n   apex, where CNAME is not allowed.  In AliasMode, TargetName MUST be\r\n   the name of a domain that has SVCB, AAAA, or A records.  It MUST NOT\r\n   be equal to the owner name, as this would cause a loop.\r\n\r\nNameservers and clients need to detect loops regardless of the number of\r\nrecords that form the loop.  All this does is force vendors to write additional\r\ncode to detect this one sub-case of a loop.  These are also the only RR types\r\nthat need to have their owner names available to parse them.\r\n",
       "createdAt": "2020-07-14T14:11:09Z",
-      "updatedAt": "2020-07-17T03:06:49Z",
+      "updatedAt": "2020-10-01T03:48:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -4026,6 +4026,27 @@
           "body": "How's the change in #224?",
           "createdAt": "2020-07-17T03:06:48Z",
           "updatedAt": "2020-07-17T03:06:48Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> All this does is force vendors to write additional\r\n> code to detect this one sub-case of a loop.\r\n\r\nI don't think this requirement binds BIND.  It's a requirement on the zone owner.  The user MUST comply; the software MAY enforce compliance.",
+          "createdAt": "2020-10-01T02:33:01Z",
+          "updatedAt": "2020-10-01T02:33:01Z"
+        },
+        {
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "body": "> > All this does is force vendors to write additional\r\n> > code to detect this one sub-case of a loop.\r\n> \r\n> I don't think this requirement binds BIND. It's a requirement on the zone owner. The user MUST comply; the software MAY enforce compliance.\r\n\r\nWell the way it is now, zone loading tools would need to check.  Anything a operator is required to do really needs to be checked by the zone parsing tools, because operators don't generally read RFCs.  Additionally it also adds requirements on UPDATE, either the tool sending the update and/or the server processing the update.",
+          "createdAt": "2020-10-01T03:45:03Z",
+          "updatedAt": "2020-10-01T03:45:03Z"
+        },
+        {
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "body": "We are in this place today because STD 13's instructions to not allow CNAME with other data where not uniformly enforced.",
+          "createdAt": "2020-10-01T03:48:09Z",
+          "updatedAt": "2020-10-01T03:48:09Z"
         }
       ]
     },
@@ -4499,7 +4520,7 @@
       "id": "MDU6SXNzdWU3MTE1NDIwMzQ=",
       "title": "HTTP-based protocols: Unclear language",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/255",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4508,8 +4529,8 @@
       "labels": [],
       "body": "\u00a7 7.6 says:\r\n\r\n```\r\nWe define an \"HTTP-based protocol\" as one that involves connecting to\r\nan \"http:\" or \"https:\" URL. When implementing an HTTP-based\r\nprotocol, clients that use HTTPS RRs for HTTP SHOULD also use it for\r\nthis URL.\r\n```\r\n\r\nI had to read this like 3 times. Why not something like:\r\n\r\n```\r\nAll protocols employing http or https schema URLs SHOULD respect HTTPS\r\nRRs.\r\n```\r\n",
       "createdAt": "2020-09-30T00:06:50Z",
-      "updatedAt": "2020-09-30T21:37:43Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-01T20:38:20Z",
+      "closedAt": "2020-10-01T20:38:20Z",
       "comments": []
     },
     {
@@ -17815,7 +17836,7 @@
       "labels": [],
       "body": "Fixes #221 \r\n\r\nChange the \"TargetName of AliasMode SHOULD NOT equal owner name\" (vs MUST NOT).\r\n\r\nClarify that recursives MUST have reasonable loop prevention.",
       "createdAt": "2020-07-17T03:06:37Z",
-      "updatedAt": "2020-10-01T02:07:31Z",
+      "updatedAt": "2020-10-01T20:21:28Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "0eeb68300611d512f97527724dbc5a79a393da5c",
@@ -17833,6 +17854,13 @@
           "body": "Ping.  I'm happy to incorporate this if we can avoid duplicate normative language.",
           "createdAt": "2020-09-22T14:42:14Z",
           "updatedAt": "2020-09-22T14:42:14Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Based on discussion: \r\n* Only normative text in one place\r\n* Make this not specific to loops",
+          "createdAt": "2020-10-01T20:21:28Z",
+          "updatedAt": "2020-10-01T20:21:28Z"
         }
       ],
       "reviews": [
@@ -18498,6 +18526,152 @@
       "mergeCommit": {
         "oid": "a185991c1832f128eb5c32bb7df0924f90dea4e2"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 257,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1MDg0",
+      "title": "More concise description of HTTP-based protocols",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/257",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #255",
+      "createdAt": "2020-10-01T02:27:00Z",
+      "updatedAt": "2020-10-01T20:38:20Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-httpbased",
+      "headRefOid": "87eff5d8212f56b113d0acd02cd29a954ca22948",
+      "closedAt": "2020-10-01T20:38:20Z",
+      "mergedAt": "2020-10-01T20:38:20Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "2566bf17427a097e11812c8596478b8fac1e9b26"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzAwNDE4",
+          "commit": {
+            "abbreviatedOid": "87eff5d"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-01T20:38:14Z",
+          "updatedAt": "2020-10-01T20:38:14Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 258,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Mjk0",
+      "title": "Separate TTL and granularity sections",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/258",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This also includes a change to the TTL advice, which was too specific\r\nand not generally true.\r\n\r\nFixes #254",
+      "createdAt": "2020-10-01T02:27:45Z",
+      "updatedAt": "2020-10-01T02:27:45Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-granularity",
+      "headRefOid": "cbba3f6e50ca4611aa9b9321b00a5dc120e2c7e3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 259,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Mzcw",
+      "title": "Remove redundant requirement on Alias target RRs",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/259",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This requirement is obvious anyway, is hard to state precisely, and has\r\ngenerated confusion from multiple readers.\r\n\r\nFixes #251",
+      "createdAt": "2020-10-01T02:28:03Z",
+      "updatedAt": "2020-10-01T02:28:03Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-alias-rrtype",
+      "headRefOid": "93ad46a3887424ace1da7d681fa904d134f9ce6b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 260,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Njkz",
+      "title": "Rephrase wire format parsing error description",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/260",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #248",
+      "createdAt": "2020-10-01T02:29:10Z",
+      "updatedAt": "2020-10-01T02:29:10Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-parsing",
+      "headRefOid": "4447c0e56c286a6a08c68a1943632848d0f630d6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 261,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1ODY5",
+      "title": "Replace \"owner name\" with \"query name\"",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/261",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There are two section headers where we imply that we are talking about\r\nthe \"owner name\" of a SVCB record, but this is not actually true due to\r\nCNAMEs, aliases, etc.  This change uses \"query name\" and \"owner name\" in\r\na more consistent way, and clarifies the relationship with Attrleaf.\r\n\r\nFixes #250",
+      "createdAt": "2020-10-01T02:29:51Z",
+      "updatedAt": "2020-10-01T02:29:51Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-qname",
+      "headRefOid": "89ad49e3ac82a2d6c9a18ba60a578a0476213722",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
