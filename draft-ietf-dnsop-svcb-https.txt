@@ -82,7 +82,7 @@ Table of Contents
    2.  The SVCB record type  . . . . . . . . . . . . . . . . . . . .   7
      2.1.  Zone file presentation format . . . . . . . . . . . . . .   8
      2.2.  RDATA wire format . . . . . . . . . . . . . . . . . . . .   9
-     2.3.  SVCB owner names  . . . . . . . . . . . . . . . . . . . .  10
+     2.3.  SVCB query names  . . . . . . . . . . . . . . . . . . . .  10
      2.4.  Modes . . . . . . . . . . . . . . . . . . . . . . . . . .  10
        2.4.1.  AliasMode . . . . . . . . . . . . . . . . . . . . . .  11
        2.4.2.  ServiceMode . . . . . . . . . . . . . . . . . . . . .  12
@@ -116,7 +116,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
      6.5.  "mandatory" . . . . . . . . . . . . . . . . . . . . . . .  22
    7.  Using SVCB with HTTPS and HTTP  . . . . . . . . . . . . . . .  22
-     7.1.  Owner names for HTTPS RRs . . . . . . . . . . . . . . . .  23
+     7.1.  Query names for HTTPS RRs . . . . . . . . . . . . . . . .  23
      7.2.  Relationship to Alt-Svc . . . . . . . . . . . . . . . . .  24
        7.2.1.  ALPN usage  . . . . . . . . . . . . . . . . . . . . .  24
        7.2.2.  Untrusted channel . . . . . . . . . . . . . . . . . .  24
@@ -506,19 +506,21 @@ Schwartz, et al.          Expires 4 April 2021                  [Page 9]
 Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
-2.3.  SVCB owner names
+2.3.  SVCB query names
 
    When querying the SVCB RR, a service is translated into a QNAME by
    prepending the service name with a label indicating the scheme,
    prefixed with an underscore, resulting in a domain name like
-   "_examplescheme.api.example.com.".
+   "_examplescheme.api.example.com.".  This follows the Attrleaf naming
+   pattern [Attrleaf], so the scheme MUST be registered appropriately
+   with IANA (see Section 10).
 
    Protocol mapping documents MAY specify additional underscore-prefixed
-   labels to be prepended (see Section 10).  For schemes that specify a
-   port (Section 3.2.3 of [URI]), one reasonable possibility is to
-   prepend the indicated port number (or the default if no port number
-   is specified).  We term this behavior "Port Prefix Naming", and use
-   it in the examples throughout this document.
+   labels to be prepended.  For schemes that specify a port
+   (Section 3.2.3 of [URI]), one reasonable possibility is to prepend
+   the indicated port number (or the default if no port number is
+   specified).  We term this behavior "Port Prefix Naming", and use it
+   in the examples throughout this document.
 
    See Section 7.1 for the HTTPS RR behavior.
 
@@ -551,8 +553,6 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    When SvcPriority is 0 the SVCB record is in AliasMode.  Otherwise, it
    is in ServiceMode.
-
-
 
 
 
@@ -1259,7 +1259,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Alternative Services proposed standard [AltSvc].  Clients and servers
    that implement HTTPS RRs are not required to implement Alt-Svc.
 
-7.1.  Owner names for HTTPS RRs
+7.1.  Query names for HTTPS RRs
 
    The HTTPS RR uses Port Prefix Naming (Section 2.3), with one
    modification: if the scheme is "https" and the port is 443, then the
