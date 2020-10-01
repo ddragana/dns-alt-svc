@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-22T02:24:42.089251+00:00",
+  "timestamp": "2020-10-01T02:14:12.138441+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4229,6 +4229,340 @@
       "updatedAt": "2020-09-06T07:51:58Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 246,
+      "id": "MDU6SXNzdWU3MDYwMzMxOTI=",
+      "title": "Update Alt-Svc",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/246",
+      "state": "OPEN",
+      "author": "enygren",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "future draft"
+      ],
+      "body": "While not relevant here, opening up this to track this item for elsewhere...\r\n\r\nTO BE REMOVED: The ALPN semantics in {{AltSvc}} are ambiguous, and\r\nproblematic in some interpretations.  We should update {{AltSvc}}\r\nto give it well-defined semantics that match HTTPS RRs.",
+      "createdAt": "2020-09-22T02:26:29Z",
+      "updatedAt": "2020-09-22T02:26:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 247,
+      "id": "MDU6SXNzdWU3MTE1MzEyOTk=",
+      "title": "Clarify presentation format for unrecognized keys",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/247",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\u00a7 2.1 says:\r\n\r\n```\r\nUnrecognized keys are represented in presentation format as\r\n\"keyNNNNN\" where NNNNN is the numeric value of the key type without\r\nleading zeros. SvcParams in this form are always treated as single-\r\nvalued, and the decoded \"value\" SHALL be used as its wire format\r\nencoding.\r\n```\r\n\r\nDoes this mean an unvalued key (empty value) would be presented as `keyNNNNN=`?",
+      "createdAt": "2020-09-29T23:33:57Z",
+      "updatedAt": "2020-09-30T21:28:05Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It would be `keyNNNNN` or `keyNNNNN=\"\"`.",
+          "createdAt": "2020-09-30T01:40:47Z",
+          "updatedAt": "2020-09-30T01:40:47Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "It might be worth explicitly stating that single-valued with an empty value is equivalent to unvalued.",
+          "createdAt": "2020-09-30T14:32:05Z",
+          "updatedAt": "2020-09-30T14:32:05Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The previous sentence says `When the \"=\" is omitted, the value or value list is interpreted as empty.`.",
+          "createdAt": "2020-09-30T20:09:39Z",
+          "updatedAt": "2020-09-30T20:09:59Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "The potential for confusion I'm pointing out is that between a zero-length string and no value. (E.g., in Python, the difference between `''` and `None`.) In this case there is no distinction. The reason this might be confusing to some is that there are three types described (empty, single-valued, and multi-valued), but only two in reality: a single string, and an encoded list of strings. That single string might be zero-length, which can be abbreviated by omitting the `=\"\"`.\r\n\r\nI also note there is an added constraint in A.1 that the list of strings in the multi-valued case may not include a zero-length string, which is not clearly simpler to me than simply allowing it, because it then requires special-casing in code that e.g. might want to represent a tuple this way and leave some values blank.",
+          "createdAt": "2020-09-30T20:26:31Z",
+          "updatedAt": "2020-09-30T20:26:31Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I also note there is an added constraint in A.1 that the list of strings in the multi-valued case may not include a zero-length string, which is not clearly simpler to me than simply allowing it\r\n\r\nThis limitation is necessary in order for empty lists to be representable.  Otherwise `list-of-things=\"\"` is ambiguous: is it a single-element list containing the empty string, or a list of length zero?  Applying this limitation seemed easier than requiring all servers to implement a more complex syntax.\r\n\r\nNone of this actually restricts the syntax of any future key, which can declare itself \"single-valued\" and then specify any parsing logic that it wants.",
+          "createdAt": "2020-09-30T21:28:05Z",
+          "updatedAt": "2020-09-30T21:28:05Z"
+        }
+      ]
+    },
+    {
+      "number": 248,
+      "id": "MDU6SXNzdWU3MTE1MzI0OTc=",
+      "title": "Malformed RRs",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/248",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "\u00a7 2.2 says\r\n\r\n```\r\nClients MUST consider an RR malformed if:\r\n * the parser reaches the end of the RDATA while parsing the\r\nSvcParams.\r\n```\r\n\r\nWon't this always be the case? I know what you mean, but it's probably worth being more precise here, e.g., if the parser reaches the end of the RDATA in a non-terminal state.",
+      "createdAt": "2020-09-29T23:37:37Z",
+      "updatedAt": "2020-09-30T20:10:53Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 249,
+      "id": "MDU6SXNzdWU3MTE1MzQ1ODA=",
+      "title": "Upgrade breakage",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/249",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The behavior normatively specified in \u00a7 2.2 for malformed RRs can lead to upgraded clients failing to follow a SVCB chain accepted by an older client. It says:\r\n\r\n```\r\nClients MUST consider an RR malformed if:\r\n...\r\n* the SvcParamValue for an SvcParamKey does not have the expected\r\nformat.\r\n\r\nNote that the second condition implies that there are no duplicate\r\nSvcParamKeys.\r\n\r\nIf any RRs are malformed, the client MUST reject the entire RRSet and\r\nfall back to non-SVCB connection establishment.\r\n```\r\n\r\nA server that incorrectly specifies a new SvcParam=SvcParamValue will cause clients that can parse said SvcParam to fail, while older clients will ignore it and continue to follow the SVCB chain. Has the alternative of ignoring malformed SvcParamValues been considered? I am actually not sure which behavior produces better outcomes.",
+      "createdAt": "2020-09-29T23:43:54Z",
+      "updatedAt": "2020-09-30T14:26:27Z",
+      "closedAt": "2020-09-30T14:26:27Z",
+      "comments": [
+        {
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "body": "If a RRset has a broken RR then rejecting the RRset will result in complaints be generated that should make there way back to the operator.   If you just ignore it will never be fixed everybody will have to deploy workaround for the broken record.   All the tools that look at the records then need to handle the broken record in some way.  You need to have different parser behaviour on primary and secondary DNS servers.  Just don't go there.",
+          "createdAt": "2020-09-30T00:09:10Z",
+          "updatedAt": "2020-09-30T00:09:10Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1 to the existing behavior. It's true that the transition for new features can be messy in general (if my server's HTTP/2 code is broken, only new clients break). This isn't great, but the alternative is *so* much worse.\r\n\r\nOnce most clients have deployed the new thing, the effect will largely go away. While the new thing is very new, the players are mostly early adopters and thus are more likely to be responsive to complaints of mistakes.",
+          "createdAt": "2020-09-30T00:16:19Z",
+          "updatedAt": "2020-09-30T00:16:19Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "Ok, seems fine.",
+          "createdAt": "2020-09-30T14:26:27Z",
+          "updatedAt": "2020-09-30T14:26:27Z"
+        }
+      ]
+    },
+    {
+      "number": 250,
+      "id": "MDU6SXNzdWU3MTE1MzcyNzY=",
+      "title": "Owner name",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/250",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "Although defined in https://www.rfc-editor.org/rfc/rfc8499.html, the term \"owner name\" is used in several places in this document without even giving a clear example of what is meant. Somewhere this could be useful is as a new third paragraph in \u00a7 2.3, e.g.:\r\n\r\n```\r\nThe service name prepended with the sequence of labels appropriate to a protocol\r\nconstitutes the SVCB owner name.\r\n```\r\n\r\nIt seems like it would make sense to reference the Attrleaf pattern here rather than waiting until \u00a7 7.1 and assuming the reader has the context to put the two together.",
+      "createdAt": "2020-09-29T23:51:50Z",
+      "updatedAt": "2020-09-30T20:33:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 251,
+      "id": "MDU6SXNzdWU3MTE1MzkxMjc=",
+      "title": "TargetName must match RRTYPE",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/251",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "\u00a7 2.4.1 says:\r\n\r\n```\r\nThe primary purpose of AliasMode is to allow aliasing at the zone apex, where\r\nCNAME is not allowed. In AliasMode, TargetName MUST be the name of\r\na domain that has SVCB, AAAA, or A records. It MUST NOT be equal to\r\nthe owner name, as this would cause a loop.\r\n```\r\n\r\nFrom my reading, this should say that TargetName MUST be the name of a domain that has AAAA or A records, or records of the same RRTYPE as that of the source record. The intro says that\r\n\r\n```\r\nAll behaviors described as applying to the SVCB RR also apply to the\r\nHTTPS RR unless explicitly stated otherwise.\r\n```\r\n\r\nbut that does not (and should not) explicitly encourage readers to alpha-substitute HTTPS for SVCB in every normative statement.",
+      "createdAt": "2020-09-29T23:57:42Z",
+      "updatedAt": "2020-10-01T01:44:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Brian Dickson also found that line confusing, for a different reason (bottom of [this email](https://mailarchive.ietf.org/arch/msg/dnsop/_Qb7Hsn1NjTJx2UTkdS-KeYIpF0/)).  We should rephrase.",
+          "createdAt": "2020-10-01T01:44:30Z",
+          "updatedAt": "2020-10-01T01:44:30Z"
+        }
+      ]
+    },
+    {
+      "number": 252,
+      "id": "MDU6SXNzdWU3MTE1Mzk4NDM=",
+      "title": "Self-target",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/252",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\u00a7 2.5.2 says:\r\n\r\n```\r\nFor ServiceMode SVCB RRs, if TargetName has the value \".\", then the\r\nowner name of this record MUST be used as the effective TargetName.\r\n```\r\n\r\nThis makes sense for HTTPS and any future child RRTYPES that eschew Attrleafs, but it doesn't make a lot of sense for owner names with Attrleafs. Wouldn't it make sense for `.` to refer to the bare domain with the Attrleafs stripped?",
+      "createdAt": "2020-09-30T00:00:03Z",
+      "updatedAt": "2020-09-30T02:31:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this is a plausible improvement.  I believe @marka63 previously suggested something similar.\r\n\r\nHowever, I think it may already be too late for this change.  iOS 14 has shipped an implementation of draft-01, and this change would break compatibility with those devices.",
+          "createdAt": "2020-09-30T02:06:10Z",
+          "updatedAt": "2020-09-30T02:06:10Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "What would be the downside? Fallback to authority? That seems like an acceptable outcome from shipping a draft implementation without a clean escape hatch.",
+          "createdAt": "2020-09-30T02:11:08Z",
+          "updatedAt": "2020-09-30T02:11:08Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "True, it's possible that this would be handled transparently via fallback.  ECH will remove the fallback, but (luckily?) ECH isn't defined yet.",
+          "createdAt": "2020-09-30T02:15:13Z",
+          "updatedAt": "2020-09-30T02:15:13Z"
+        },
+        {
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "body": "This will only become a issue for clients that are not aware of this expected behaviour and the operator uses \".\" for the target name.\r\n\r\nApple has implicitly committed to shipping a fix for this if it is changed by releasing code against a draft.  Additionally iOS users are relatively quick to apply updates.  I would not be worried about making a change like this.",
+          "createdAt": "2020-09-30T02:31:05Z",
+          "updatedAt": "2020-09-30T02:31:05Z"
+        }
+      ]
+    },
+    {
+      "number": 253,
+      "id": "MDU6SXNzdWU3MTE1NDEwNTI=",
+      "title": "Attrleaf on HTTPS RRs",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/253",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It seems cleaner to say that the HTTPS RRTYPE always implies the http scheme, so that a non-standard port requires only one prepended label for the port. E.g., https://www.example.com:8443 would involve resolution of the name `_8443.www.example.com` rather than `_8443._https.www.example.com`.",
+      "createdAt": "2020-09-30T00:03:41Z",
+      "updatedAt": "2020-09-30T14:31:21Z",
+      "closedAt": "2020-09-30T14:31:21Z",
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That would be more compact, but it is not compatible RFC 8552:\r\n\r\n> A global underscored node name is the one that is closest\r\n> to the root of the DNS hierarchy\r\n\r\n> If a public specification calls for use of an underscored node\r\n> name, the global underscored node name -- the underscored name\r\n> that is closest to the DNS root -- MUST be entered into this\r\n> registry.",
+          "createdAt": "2020-09-30T01:47:21Z",
+          "updatedAt": "2020-09-30T01:47:21Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "Ah, ok. Details abound. This makes complete sense now.",
+          "createdAt": "2020-09-30T14:31:21Z",
+          "updatedAt": "2020-09-30T14:31:21Z"
+        }
+      ]
+    },
+    {
+      "number": 254,
+      "id": "MDU6SXNzdWU3MTE1NDExMzI=",
+      "title": "Separate TTL and granularity",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/254",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "Why are these in the same section?",
+      "createdAt": "2020-09-30T00:03:59Z",
+      "updatedAt": "2020-09-30T21:34:36Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 255,
+      "id": "MDU6SXNzdWU3MTE1NDIwMzQ=",
+      "title": "HTTP-based protocols: Unclear language",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/255",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "\u00a7 7.6 says:\r\n\r\n```\r\nWe define an \"HTTP-based protocol\" as one that involves connecting to\r\nan \"http:\" or \"https:\" URL. When implementing an HTTP-based\r\nprotocol, clients that use HTTPS RRs for HTTP SHOULD also use it for\r\nthis URL.\r\n```\r\n\r\nI had to read this like 3 times. Why not something like:\r\n\r\n```\r\nAll protocols employing http or https schema URLs SHOULD respect HTTPS\r\nRRs.\r\n```\r\n",
+      "createdAt": "2020-09-30T00:06:50Z",
+      "updatedAt": "2020-09-30T21:37:43Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 256,
+      "id": "MDU6SXNzdWU3MTE1NDM5MDA=",
+      "title": "Make a clean break with the past",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/256",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "To avoid the problem SSL/TLS had for years with ambiguity re: the CN in the presence of the SAN extension, you should clearly state somewhere that when SVCB is available for an authority endpoint, the legacy defaults (hostname on port 80/443) must never be used as a fallback or as part of a pool of options for the client. That, or explain clearly the justification for the current design choice.",
+      "createdAt": "2020-09-30T00:12:27Z",
+      "updatedAt": "2020-09-30T21:41:52Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What's the concern here? The current design allows fallback when it is safe, but this is independent of the HTTPS upgrade, which applies regardless of connection fallback.",
+          "createdAt": "2020-09-30T01:37:57Z",
+          "updatedAt": "2020-09-30T01:37:57Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "My concern is with \u00a73 step 6.\r\n\r\nRealistically, there will always be legacy authority endpoints to handle the long tail of clients that don't support SVCB. But, this authority endpoint will expect less and less load over time, and at some point may fail to be adequately load balanced. If a problem appears with the SVCB chain that causes all clients to fall back to the authority record, you could get a stampeding herd all directed at the target of that record, effectively creating a DDoS.\r\n\r\nThe justification might be the need to support the type of spec change being discussed in #252. I'm not sure that eliminating fallback is doable, even if it might be a good idea in theory. But it seems like the reasoning should be spelled out somewhere.",
+          "createdAt": "2020-09-30T14:51:22Z",
+          "updatedAt": "2020-09-30T14:51:22Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> you could get a stampeding herd all directed at the target of that record, effectively creating a DDoS.\r\n\r\nOK, but the alternative would be that those users would have already failed to connect.  Why is that better?\r\n\r\nI think the main motivation for the current fallback logic is that more fallback means more resilience.  Ultimately, I think fallback behaviors are going to vary between clients: different clients have different design considerations, and the standard can't justify strict requirements on this topic.\r\n\r\nIf we did eliminate fallback in the way you describe, we would still probably have to allow it in cases where there are ServiceMode records but none are compatible with the client.  In other words, eliminating fallback would not reduce client complexity.",
+          "createdAt": "2020-09-30T15:30:42Z",
+          "updatedAt": "2020-09-30T21:38:11Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "NONE",
+          "body": "I think I'm not going to be the only one with these questions, which suggests it might be worthwhile to explain the design choice in an appendix. I agree it doesn't belong in the main text along with normative protocol design.",
+          "createdAt": "2020-09-30T20:28:39Z",
+          "updatedAt": "2020-09-30T20:28:39Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't think this is really a design choice.  It's a \"MAY\", documenting that there's no reason to forbid this behavior.  Forbidding the fallback would certainly require a justification (as in Section 8.1).",
+          "createdAt": "2020-09-30T21:41:52Z",
+          "updatedAt": "2020-09-30T21:41:52Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -17481,7 +17815,7 @@
       "labels": [],
       "body": "Fixes #221 \r\n\r\nChange the \"TargetName of AliasMode SHOULD NOT equal owner name\" (vs MUST NOT).\r\n\r\nClarify that recursives MUST have reasonable loop prevention.",
       "createdAt": "2020-07-17T03:06:37Z",
-      "updatedAt": "2020-07-17T03:15:30Z",
+      "updatedAt": "2020-10-01T02:07:31Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "0eeb68300611d512f97527724dbc5a79a393da5c",
@@ -17492,7 +17826,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Ping.  I'm happy to incorporate this if we can avoid duplicate normative language.",
+          "createdAt": "2020-09-22T14:42:14Z",
+          "updatedAt": "2020-09-22T14:42:14Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDUwMzQ2NzIw",
@@ -17511,6 +17853,26 @@
               "body": "The AliasForm section already says \"To avoid unbounded alias chains, clients and recursive resolvers MUST impose a limit on the total number of SVCB aliases they will follow\".  I don't understand whether this requirement is equivalent or not.",
               "createdAt": "2020-07-17T03:15:30Z",
               "updatedAt": "2020-07-17T03:15:30Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk5OTY1NDEw",
+          "commit": {
+            "abbreviatedOid": "3f507ed"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-01T02:07:30Z",
+          "updatedAt": "2020-10-01T02:07:31Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "To clarify, I think we need to answer whether \"a limit on the total number of SVCB aliases\" counts as \"reasonable loop prevention\".  If it does, then this line is redundant.  If it doesn't, then the intent here is to require a specific loop-detection behavior (before hitting the alias limit), which I think would need to be stated more explicitly.",
+              "createdAt": "2020-10-01T02:07:31Z",
+              "updatedAt": "2020-10-01T02:07:31Z"
             }
           ]
         }
@@ -17640,7 +18002,7 @@
       "labels": [],
       "body": "This changes the definition of \"Port Prefix Naming\" to only include the\r\n_port prefix if a non-default port is specified.  None of the examples\r\nexercise this case, and the HTTPS RR overrides it, so this only matters\r\nfor future protocol mappings that choose to follow this advice.",
       "createdAt": "2020-07-28T20:25:44Z",
-      "updatedAt": "2020-07-28T20:25:44Z",
+      "updatedAt": "2020-09-22T14:41:05Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "bd3bd0b9e3aad9e51dbe6911f4d451cb24af5bbe",
@@ -17716,26 +18078,42 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDYyOTQzNjUz",
       "title": "Remove TODOs",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/233",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-08-04T18:58:02Z",
-      "updatedAt": "2020-09-16T18:46:03Z",
+      "updatedAt": "2020-09-22T02:26:45Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "b418893c912b89873ba8bde0b9751d6c31717b47",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-todo",
       "headRefOid": "9d1096316933cb32bb24510a8952ad10012cf9ac",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-22T02:26:45Z",
+      "mergedAt": "2020-09-22T02:26:45Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "cbe827fdd389b298da6172cc0606a634610875c4"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkzMDkyNzE1",
+          "commit": {
+            "abbreviatedOid": "9d10963"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-22T02:26:38Z",
+          "updatedAt": "2020-09-22T02:26:38Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 234,
@@ -18058,26 +18436,42 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDgyMTY4Njgx",
       "title": "Add a forward reference to the underscore registry",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/244",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-09-08T16:39:55Z",
-      "updatedAt": "2020-09-16T18:47:42Z",
+      "updatedAt": "2020-09-22T02:27:14Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "748869748aee219b98047820fde9ef84179d605d",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-underscore",
       "headRefOid": "df76284ce7c6f6090d749d0e9283def5af1e4e5a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-22T02:27:14Z",
+      "mergedAt": "2020-09-22T02:27:14Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "441172ba67c13093aab98e2f51ea9ccd4591bff5"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkzMDkyODM3",
+          "commit": {
+            "abbreviatedOid": "df76284"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-22T02:27:09Z",
+          "updatedAt": "2020-09-22T02:27:09Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 245,
