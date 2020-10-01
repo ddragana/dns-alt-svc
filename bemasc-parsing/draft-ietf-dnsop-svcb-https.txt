@@ -484,7 +484,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    Clients MUST consider an RR malformed if:
 
-   *  the parser reaches the end of the RDATA in a non-terminal state.
+   *  the end of the RDATA occurs within a SvcParam.
 
    *  SvcParamKeys are not in strictly increasing numeric order.
 
