@@ -1476,7 +1476,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    2.  If the client implements Alt-Svc, try to connect using any
        entries from the Alt-Svc cache.
 
-   3.  Continue connection establishment as in Section 3.
+   3.  Continue connection establishment as in Section 3 if necessary.
 
    As a latency optimization, clients MAY prefetch DNS records for later
    steps before they are needed.
