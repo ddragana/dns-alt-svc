@@ -881,7 +881,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    follow (e.g.  CNAME, DNAME [DNAME]).
 
    See Section 2.4.1 for additional safeguards for recursive resolvers
-   to implement to mitigate loop.
+   to implement to mitigate loops.
 
    See Section 5.2 for possible optimizations of this procedure.
 
