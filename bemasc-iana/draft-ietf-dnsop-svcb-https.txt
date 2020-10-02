@@ -1717,8 +1717,8 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    specification MUST specify the SvcParamValue's presentation format
    and MAY detail its intended meaning and use.  Additionally, the
    registry SHALL allow registrants to have a Number temporarily marked
-   as "Known Unregistered Use" (without an associated Name) on a First
-   Come First Served basis.
+   as "Reserved" (without an associated Name) on a First Come First
+   Served basis.
 
    This arrangement supports the development of new parameters while
    ensuring that zone files can be made interoperable.
