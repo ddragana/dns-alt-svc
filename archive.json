@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-01T20:39:15.403571+00:00",
+  "timestamp": "2020-10-02T14:16:07.696140+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4281,7 +4281,7 @@
       "labels": [],
       "body": "\u00a7 2.1 says:\r\n\r\n```\r\nUnrecognized keys are represented in presentation format as\r\n\"keyNNNNN\" where NNNNN is the numeric value of the key type without\r\nleading zeros. SvcParams in this form are always treated as single-\r\nvalued, and the decoded \"value\" SHALL be used as its wire format\r\nencoding.\r\n```\r\n\r\nDoes this mean an unvalued key (empty value) would be presented as `keyNNNNN=`?",
       "createdAt": "2020-09-29T23:33:57Z",
-      "updatedAt": "2020-09-30T21:28:05Z",
+      "updatedAt": "2020-10-02T14:11:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -4318,6 +4318,13 @@
           "body": "> I also note there is an added constraint in A.1 that the list of strings in the multi-valued case may not include a zero-length string, which is not clearly simpler to me than simply allowing it\r\n\r\nThis limitation is necessary in order for empty lists to be representable.  Otherwise `list-of-things=\"\"` is ambiguous: is it a single-element list containing the empty string, or a list of length zero?  Applying this limitation seemed easier than requiring all servers to implement a more complex syntax.\r\n\r\nNone of this actually restricts the syntax of any future key, which can declare itself \"single-valued\" and then specify any parsing logic that it wants.",
           "createdAt": "2020-09-30T21:28:05Z",
           "updatedAt": "2020-09-30T21:28:05Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Conclusion: Split the multi-value presentation syntax into a separate section (advisory-only), then refer to it normatively from the key definitions that require it.",
+          "createdAt": "2020-10-02T14:11:53Z",
+          "updatedAt": "2020-10-02T14:11:53Z"
         }
       ]
     },
@@ -4326,7 +4333,7 @@
       "id": "MDU6SXNzdWU3MTE1MzI0OTc=",
       "title": "Malformed RRs",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/248",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4335,8 +4342,8 @@
       "labels": [],
       "body": "\u00a7 2.2 says\r\n\r\n```\r\nClients MUST consider an RR malformed if:\r\n * the parser reaches the end of the RDATA while parsing the\r\nSvcParams.\r\n```\r\n\r\nWon't this always be the case? I know what you mean, but it's probably worth being more precise here, e.g., if the parser reaches the end of the RDATA in a non-terminal state.",
       "createdAt": "2020-09-29T23:37:37Z",
-      "updatedAt": "2020-09-30T20:10:53Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-01T20:54:34Z",
+      "closedAt": "2020-10-01T20:54:34Z",
       "comments": []
     },
     {
@@ -4382,7 +4389,7 @@
       "id": "MDU6SXNzdWU3MTE1MzcyNzY=",
       "title": "Owner name",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/250",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4391,8 +4398,8 @@
       "labels": [],
       "body": "Although defined in https://www.rfc-editor.org/rfc/rfc8499.html, the term \"owner name\" is used in several places in this document without even giving a clear example of what is meant. Somewhere this could be useful is as a new third paragraph in \u00a7 2.3, e.g.:\r\n\r\n```\r\nThe service name prepended with the sequence of labels appropriate to a protocol\r\nconstitutes the SVCB owner name.\r\n```\r\n\r\nIt seems like it would make sense to reference the Attrleaf pattern here rather than waiting until \u00a7 7.1 and assuming the reader has the context to put the two together.",
       "createdAt": "2020-09-29T23:51:50Z",
-      "updatedAt": "2020-09-30T20:33:21Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-01T20:54:09Z",
+      "closedAt": "2020-10-01T20:54:09Z",
       "comments": []
     },
     {
@@ -4404,12 +4411,12 @@
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
-        "bemasc"
+        "enygren"
       ],
       "labels": [],
       "body": "\u00a7 2.4.1 says:\r\n\r\n```\r\nThe primary purpose of AliasMode is to allow aliasing at the zone apex, where\r\nCNAME is not allowed. In AliasMode, TargetName MUST be the name of\r\na domain that has SVCB, AAAA, or A records. It MUST NOT be equal to\r\nthe owner name, as this would cause a loop.\r\n```\r\n\r\nFrom my reading, this should say that TargetName MUST be the name of a domain that has AAAA or A records, or records of the same RRTYPE as that of the source record. The intro says that\r\n\r\n```\r\nAll behaviors described as applying to the SVCB RR also apply to the\r\nHTTPS RR unless explicitly stated otherwise.\r\n```\r\n\r\nbut that does not (and should not) explicitly encourage readers to alpha-substitute HTTPS for SVCB in every normative statement.",
       "createdAt": "2020-09-29T23:57:42Z",
-      "updatedAt": "2020-10-01T01:44:32Z",
+      "updatedAt": "2020-10-02T02:05:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -4502,7 +4509,7 @@
       "id": "MDU6SXNzdWU3MTE1NDExMzI=",
       "title": "Separate TTL and granularity",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/254",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4511,8 +4518,8 @@
       "labels": [],
       "body": "Why are these in the same section?",
       "createdAt": "2020-09-30T00:03:59Z",
-      "updatedAt": "2020-09-30T21:34:36Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-01T20:39:48Z",
+      "closedAt": "2020-10-01T20:39:48Z",
       "comments": []
     },
     {
@@ -17827,22 +17834,24 @@
     {
       "number": 224,
       "id": "MDExOlB1bGxSZXF1ZXN0NDUwNzEzNDM3",
-      "title": "Recursives and handling loops",
+      "title": "Recursives, handling loops, and clarifying AliasMode targets",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/224",
       "state": "OPEN",
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "enygren"
+      ],
       "labels": [],
       "body": "Fixes #221 \r\n\r\nChange the \"TargetName of AliasMode SHOULD NOT equal owner name\" (vs MUST NOT).\r\n\r\nClarify that recursives MUST have reasonable loop prevention.",
       "createdAt": "2020-07-17T03:06:37Z",
-      "updatedAt": "2020-10-01T20:21:28Z",
+      "updatedAt": "2020-10-02T14:15:35Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "0eeb68300611d512f97527724dbc5a79a393da5c",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-loop-safety",
-      "headRefOid": "3f507eddca1f893c20b974ca8487b6a59fe10cde",
+      "headRefOid": "010e27d15e33d0b3be995a146bae8e938ae07ae4",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -17858,9 +17867,9 @@
         {
           "author": "enygren",
           "authorAssociation": "COLLABORATOR",
-          "body": "Based on discussion: \r\n* Only normative text in one place\r\n* Make this not specific to loops",
+          "body": "Based on discussion: \r\n* Only normative text in one place\r\n* Make this not specific to loops\r\n* Address PR #259 at the same time.  (Switch to non-normative language to describe target of an AliasMode record.)",
           "createdAt": "2020-10-01T20:21:28Z",
-          "updatedAt": "2020-10-01T20:21:28Z"
+          "updatedAt": "2020-10-01T20:44:23Z"
         }
       ],
       "reviews": [
@@ -17880,7 +17889,7 @@
               "originalPosition": 13,
               "body": "The AliasForm section already says \"To avoid unbounded alias chains, clients and recursive resolvers MUST impose a limit on the total number of SVCB aliases they will follow\".  I don't understand whether this requirement is equivalent or not.",
               "createdAt": "2020-07-17T03:15:30Z",
-              "updatedAt": "2020-07-17T03:15:30Z"
+              "updatedAt": "2020-10-02T14:15:35Z"
             }
           ]
         },
@@ -17900,7 +17909,47 @@
               "originalPosition": 13,
               "body": "To clarify, I think we need to answer whether \"a limit on the total number of SVCB aliases\" counts as \"reasonable loop prevention\".  If it does, then this line is redundant.  If it doesn't, then the intent here is to require a specific loop-detection behavior (before hitting the alias limit), which I think would need to be stated more explicitly.",
               "createdAt": "2020-10-01T02:07:31Z",
-              "updatedAt": "2020-10-01T02:07:31Z"
+              "updatedAt": "2020-10-02T14:15:35Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzAxNjE5",
+          "commit": {
+            "abbreviatedOid": "3f507ed"
+          },
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-01T20:40:11Z",
+          "updatedAt": "2020-10-01T20:40:12Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Chrome intends an alias limit small enough that extra loop detection beyond that would just be silly.  Please don't make me implement silly loop detection.",
+              "createdAt": "2020-10-01T20:40:12Z",
+              "updatedAt": "2020-10-02T14:15:35Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAxMTczNDMz",
+          "commit": {
+            "abbreviatedOid": "d9f6b69"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-02T14:14:52Z",
+          "updatedAt": "2020-10-02T14:14:53Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\nAAAA, and/or A records.  The TargetName SHOULD NOT be equal\r\n```",
+              "createdAt": "2020-10-02T14:14:52Z",
+              "updatedAt": "2020-10-02T14:15:35Z"
             }
           ]
         }
@@ -18441,11 +18490,13 @@
       "state": "OPEN",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "bemasc"
+      ],
       "labels": [],
       "body": "",
       "createdAt": "2020-09-08T16:11:30Z",
-      "updatedAt": "2020-09-16T18:47:25Z",
+      "updatedAt": "2020-10-01T20:55:11Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "105ea12b642ca7dee97111f6ae7836a3642d30ae",
@@ -18576,51 +18627,75 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Mjk0",
       "title": "Separate TTL and granularity sections",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/258",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This also includes a change to the TTL advice, which was too specific\r\nand not generally true.\r\n\r\nFixes #254",
       "createdAt": "2020-10-01T02:27:45Z",
-      "updatedAt": "2020-10-01T02:27:45Z",
+      "updatedAt": "2020-10-01T20:39:48Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-granularity",
       "headRefOid": "cbba3f6e50ca4611aa9b9321b00a5dc120e2c7e3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-01T20:39:48Z",
+      "mergedAt": "2020-10-01T20:39:47Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "92a0a799cb6ace2b595a47b60d26adfd3aa22d14"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzAxMzA4",
+          "commit": {
+            "abbreviatedOid": "cbba3f6"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-01T20:39:41Z",
+          "updatedAt": "2020-10-01T20:39:41Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 259,
       "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Mzcw",
       "title": "Remove redundant requirement on Alias target RRs",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/259",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This requirement is obvious anyway, is hard to state precisely, and has\r\ngenerated confusion from multiple readers.\r\n\r\nFixes #251",
       "createdAt": "2020-10-01T02:28:03Z",
-      "updatedAt": "2020-10-01T02:28:03Z",
+      "updatedAt": "2020-10-01T20:43:42Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-alias-rrtype",
       "headRefOid": "93ad46a3887424ace1da7d681fa904d134f9ce6b",
-      "closedAt": null,
+      "closedAt": "2020-10-01T20:43:42Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@enygren will take a look at improving the phrasing here.",
+          "createdAt": "2020-10-01T20:43:42Z",
+          "updatedAt": "2020-10-01T20:43:42Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -18628,51 +18703,137 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1Njkz",
       "title": "Rephrase wire format parsing error description",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/260",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #248",
       "createdAt": "2020-10-01T02:29:10Z",
-      "updatedAt": "2020-10-01T02:29:10Z",
+      "updatedAt": "2020-10-01T20:54:34Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-parsing",
-      "headRefOid": "4447c0e56c286a6a08c68a1943632848d0f630d6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f6fb865805ade7401ad1bffe0fb8f19f955740c6",
+      "closedAt": "2020-10-01T20:54:34Z",
+      "mergedAt": "2020-10-01T20:54:34Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "516c06fbd141e2fc1566be2f43207b32eb74b73a"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzA4NDIx",
+          "commit": {
+            "abbreviatedOid": "4447c0e"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-01T20:50:59Z",
+          "updatedAt": "2020-10-01T20:50:59Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n* the end of the RDATA occurs within a SvcParam.\r\n```",
+              "createdAt": "2020-10-01T20:50:59Z",
+              "updatedAt": "2020-10-01T20:51:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzEwNjg1",
+          "commit": {
+            "abbreviatedOid": "f6fb865"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-01T20:54:28Z",
+          "updatedAt": "2020-10-01T20:54:28Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 261,
       "id": "MDExOlB1bGxSZXF1ZXN0NDk1OTA1ODY5",
       "title": "Replace \"owner name\" with \"query name\"",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/261",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "There are two section headers where we imply that we are talking about\r\nthe \"owner name\" of a SVCB record, but this is not actually true due to\r\nCNAMEs, aliases, etc.  This change uses \"query name\" and \"owner name\" in\r\na more consistent way, and clarifies the relationship with Attrleaf.\r\n\r\nFixes #250",
       "createdAt": "2020-10-01T02:29:51Z",
-      "updatedAt": "2020-10-01T02:29:51Z",
+      "updatedAt": "2020-10-01T20:54:09Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "441172ba67c13093aab98e2f51ea9ccd4591bff5",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-qname",
       "headRefOid": "89ad49e3ac82a2d6c9a18ba60a578a0476213722",
+      "closedAt": "2020-10-01T20:54:09Z",
+      "mergedAt": "2020-10-01T20:54:09Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "48b689f13945d6a6f7458462b7da9bfeb6e95e01"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAwNzEwNDA1",
+          "commit": {
+            "abbreviatedOid": "89ad49e"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-01T20:54:03Z",
+          "updatedAt": "2020-10-01T20:54:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 262,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk2NjUwMDI3",
+      "title": "Proposal: Simplify SvcParamKey registration policy",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/262",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change removes the First Come First Served registration policy\r\nand the Expert Review policy, and combines them into a single\r\nSpecification Required range, with guidelines for what constitutes a\r\nminimal specification.  The goal of this change is to avoid zone file\r\nincompatibilities that could arise from the registration of keys whose\r\npresentation format is poorly documented.",
+      "createdAt": "2020-10-02T02:53:17Z",
+      "updatedAt": "2020-10-02T03:19:16Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "516c06fbd141e2fc1566be2f43207b32eb74b73a",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-iana",
+      "headRefOid": "88c9ba64d87aff6d856fc017c219c86353cce9ec",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tfpauly FYI, this is relevant to a discussion we had.  Assuming this policy is considered permissible by IANA, I think it should provide a better balance of flexibility and interoperability.\r\n",
+          "createdAt": "2020-10-02T03:17:25Z",
+          "updatedAt": "2020-10-02T03:17:25Z"
+        }
+      ],
       "reviews": []
     }
   ]
