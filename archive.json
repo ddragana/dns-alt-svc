@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-06T19:19:01.836682+00:00",
+  "timestamp": "2020-10-07T19:56:42.154439+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4637,7 +4637,7 @@
       "labels": [],
       "body": "The specification for AliasMode does not explicitly specify that it **MUST NOT have any SvcParams**.\r\n\r\nThis should be added to the first paragraph of the AliasMode section (currently 2.4.1).\r\n\r\nAlso, the current published draft incorrectly references AliasMode as section 2.4.3 (in the list in the body of 1.2, bullet 1 for SvcPriority.\r\nEither that section (2.4.3) should explicitly indicate that priority=0 means AliasMode and point back to 2.4.1, or the section link for SvcPriority should be removed, or a separate link to the AliasMode section itself should be included in that bit of text (bullet 1 of 1.2).",
       "createdAt": "2020-10-02T19:11:43Z",
-      "updatedAt": "2020-10-06T19:18:20Z",
+      "updatedAt": "2020-10-06T19:20:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -4653,6 +4653,13 @@
           "body": "I think the text would be better if the AliasMode params were distinguished on the \"publisher\" vs \"consumer\" side.\r\nI.e. that the current specification is, \"MUST NOT\" publish records with any SvcParams, but that the rules for handling AliasMode records SHOULD be prepared to handle AliasMode records with SvcParams (and that they should ignore them).\r\nThat would clarify what to publish (including what managed DNS providers need to support for their customers), while still accommodating future updates.\r\nClarity on the publishing side is NOT negotiable, honestly. The spec needs to be 100% complete and consistent on what is or is not in each type of record, as well as how those are to be handled.\r\n(Thanks.)",
           "createdAt": "2020-10-02T21:48:13Z",
           "updatedAt": "2020-10-02T21:48:13Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OK, I've opened a PR to clarify the requirements here (#269).",
+          "createdAt": "2020-10-06T19:20:21Z",
+          "updatedAt": "2020-10-06T19:20:21Z"
         }
       ]
     },
@@ -19032,7 +19039,7 @@
       "labels": [],
       "body": "This change also combines all advice about zone structures and example\r\nzones into one section.",
       "createdAt": "2020-10-02T18:40:04Z",
-      "updatedAt": "2020-10-02T18:40:04Z",
+      "updatedAt": "2020-10-07T19:36:35Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
@@ -19044,33 +19051,63 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0MjA1NzQ0",
+          "commit": {
+            "abbreviatedOid": "e5b0523"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-07T19:36:35Z",
+          "updatedAt": "2020-10-07T19:36:35Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 267,
       "id": "MDExOlB1bGxSZXF1ZXN0NDk3MTQzNzIz",
       "title": "Unify text regarding SvcPriority",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/267",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This text was divided across two subsections.  This change also adjusts\r\nthe title of the \"Modes\" section, whose subsections were broader than\r\njust the two modes.\r\n\r\nAddresses #266",
       "createdAt": "2020-10-02T21:28:39Z",
-      "updatedAt": "2020-10-02T21:28:39Z",
+      "updatedAt": "2020-10-07T19:56:08Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-pri",
       "headRefOid": "8b12ed23eef95a4734b89487bde437f05457f589",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-07T19:56:08Z",
+      "mergedAt": "2020-10-07T19:56:08Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "e814761abd7d7e023c883036aed63926383d2d81"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0MjA3ODQx",
+          "commit": {
+            "abbreviatedOid": "8b12ed2"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-07T19:39:49Z",
+          "updatedAt": "2020-10-07T19:39:49Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 269,
@@ -19097,6 +19134,171 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 270,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk4ODAwNTU1",
+      "title": "Move multi-value references into the keys",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/270",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #247",
+      "createdAt": "2020-10-06T19:56:04Z",
+      "updatedAt": "2020-10-06T19:56:04Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-multivalue",
+      "headRefOid": "3a33136e9078bd2a87f7f2c87562c7051470fb34",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 271,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk4ODg3ODgz",
+      "title": "Add an example of a full Multi-CDN configuration.",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/271",
+      "state": "OPEN",
+      "author": "enygren",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-06T23:22:56Z",
+      "updatedAt": "2020-10-07T02:18:34Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "enygren-multicdn",
+      "headRefOid": "5c4fa287678a27f766afb05b99cfd29f880000b2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDM2NzAx",
+          "commit": {
+            "abbreviatedOid": "9bbdab6"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Thanks!  Only minor comments.",
+          "createdAt": "2020-10-06T23:54:14Z",
+          "updatedAt": "2020-10-07T00:18:58Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "`\\t` leading to indentation weirdness",
+              "createdAt": "2020-10-06T23:54:14Z",
+              "updatedAt": "2020-10-07T02:17:13Z"
+            },
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\r\n     cdn1 300 IN HTTPS 1 h3pool alpn=h3 echconfig=\"123...\"\r\n```",
+              "createdAt": "2020-10-07T00:14:17Z",
+              "updatedAt": "2020-10-07T02:17:13Z"
+            },
+            {
+              "originalPosition": 51,
+              "body": "A TTL of 300 on the HTTPS records seems low.",
+              "createdAt": "2020-10-07T00:16:43Z",
+              "updatedAt": "2020-10-07T02:17:13Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDU3MTk1",
+          "commit": {
+            "abbreviatedOid": "9bbdab6"
+          },
+          "author": "brian-peter-dickson",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-07T01:01:16Z",
+          "updatedAt": "2020-10-07T01:01:17Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "This is illegal. RFC 1034 (and addition RFCs clarifying this) restrict the owner to having a single CNAME RR (and prohibit any other RRTYPE with the same owner as a CNAME).\r\nSpecifically, you cannot have two CNAME records with the same owner name (in this case \"www\".)",
+              "createdAt": "2020-10-07T01:01:16Z",
+              "updatedAt": "2020-10-07T02:17:13Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDc3NTU4",
+          "commit": {
+            "abbreviatedOid": "9bbdab6"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-07T02:10:39Z",
+          "updatedAt": "2020-10-07T02:10:39Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Yes.  The point is that only one of these exists in the RRset at any one time.  I'll try and clarify this.",
+              "createdAt": "2020-10-07T02:10:39Z",
+              "updatedAt": "2020-10-07T02:17:13Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDgwMjU0",
+          "commit": {
+            "abbreviatedOid": "5c4fa28"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-07T02:18:27Z",
+          "updatedAt": "2020-10-07T02:18:27Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Is the updated text better?",
+              "createdAt": "2020-10-07T02:18:27Z",
+              "updatedAt": "2020-10-07T02:18:27Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDgwMjg3",
+          "commit": {
+            "abbreviatedOid": "5c4fa28"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-07T02:18:34Z",
+          "updatedAt": "2020-10-07T02:18:34Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "updated",
+              "createdAt": "2020-10-07T02:18:34Z",
+              "updatedAt": "2020-10-07T02:18:35Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
