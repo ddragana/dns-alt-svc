@@ -595,6 +595,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    TargetName SHOULD NOT be equal to the owner name, as this would
    result in a loop.
 
+   In AliasMode, records SHOULD NOT include any SvcParams, and
+   recipients MUST ignore any SvcParams that are present.
+
    For example, the operator of foo://example.com:8080 could point
    requests to a service operating at foosvc.example.net by publishing:
 
@@ -606,9 +609,6 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    foosvc.example.net promises to always publish a SVCB record, this
    AliasMode record can be replaced by a CNAME, which would likely
    improve performance.
-
-
-
 
 
 
