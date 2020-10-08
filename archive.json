@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-07T19:56:42.154439+00:00",
+  "timestamp": "2020-10-08T15:09:02.237751+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4628,7 +4628,7 @@
       "id": "MDU6SXNzdWU3MTM4NDQ0NjY=",
       "title": "AliasMode clarification needed",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/266",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "brian-peter-dickson",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4637,8 +4637,8 @@
       "labels": [],
       "body": "The specification for AliasMode does not explicitly specify that it **MUST NOT have any SvcParams**.\r\n\r\nThis should be added to the first paragraph of the AliasMode section (currently 2.4.1).\r\n\r\nAlso, the current published draft incorrectly references AliasMode as section 2.4.3 (in the list in the body of 1.2, bullet 1 for SvcPriority.\r\nEither that section (2.4.3) should explicitly indicate that priority=0 means AliasMode and point back to 2.4.1, or the section link for SvcPriority should be removed, or a separate link to the AliasMode section itself should be included in that bit of text (bullet 1 of 1.2).",
       "createdAt": "2020-10-02T19:11:43Z",
-      "updatedAt": "2020-10-06T19:20:22Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-07T20:33:26Z",
+      "closedAt": "2020-10-07T20:33:26Z",
       "comments": [
         {
           "author": "bemasc",
@@ -19032,24 +19032,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk3MDczNTI3",
       "title": "Add a note about the one-scheme-per-name rule",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/265",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This change also combines all advice about zone structures and example\r\nzones into one section.",
       "createdAt": "2020-10-02T18:40:04Z",
-      "updatedAt": "2020-10-07T19:36:35Z",
+      "updatedAt": "2020-10-07T19:58:10Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-flex",
       "headRefOid": "e5b0523a0e7f7af21966a260d055861d164e5850",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-07T19:58:06Z",
+      "mergedAt": "2020-10-07T19:58:06Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "a0b4a126baa81c6cc227c796d6826fdd06767d2f"
+      },
       "comments": [],
       "reviews": [
         {
@@ -19114,26 +19116,42 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk4NzgxMzk1",
       "title": "Clarify rules for SvcParams in AliasMode",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/269",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #266",
       "createdAt": "2020-10-06T19:19:02Z",
-      "updatedAt": "2020-10-06T19:19:02Z",
+      "updatedAt": "2020-10-07T20:33:26Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-alias-params",
       "headRefOid": "be82cb038488977aa0d224f27758b5c93de7314e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-07T20:33:26Z",
+      "mergedAt": "2020-10-07T20:33:26Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "4c4a85a91bd2264cd6d29c63b4743819bb40eca7"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0MjQ0Njk3",
+          "commit": {
+            "abbreviatedOid": "be82cb0"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-07T20:33:20Z",
+          "updatedAt": "2020-10-07T20:33:20Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 270,
@@ -19173,13 +19191,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-06T23:22:56Z",
-      "updatedAt": "2020-10-07T02:18:34Z",
+      "updatedAt": "2020-10-08T14:58:59Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
-      "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
+      "baseRefOid": "a0b4a126baa81c6cc227c796d6826fdd06767d2f",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-multicdn",
-      "headRefOid": "5c4fa287678a27f766afb05b99cfd29f880000b2",
+      "headRefOid": "4fd9942f9ca38c4e106a57a2111df1aa9b1c2caf",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -19202,19 +19220,19 @@
               "originalPosition": 45,
               "body": "`\\t` leading to indentation weirdness",
               "createdAt": "2020-10-06T23:54:14Z",
-              "updatedAt": "2020-10-07T02:17:13Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             },
             {
               "originalPosition": 51,
               "body": "```suggestion\r\n     cdn1 300 IN HTTPS 1 h3pool alpn=h3 echconfig=\"123...\"\r\n```",
               "createdAt": "2020-10-07T00:14:17Z",
-              "updatedAt": "2020-10-07T02:17:13Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             },
             {
               "originalPosition": 51,
               "body": "A TTL of 300 on the HTTPS records seems low.",
               "createdAt": "2020-10-07T00:16:43Z",
-              "updatedAt": "2020-10-07T02:17:13Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             }
           ]
         },
@@ -19234,7 +19252,7 @@
               "originalPosition": 39,
               "body": "This is illegal. RFC 1034 (and addition RFCs clarifying this) restrict the owner to having a single CNAME RR (and prohibit any other RRTYPE with the same owner as a CNAME).\r\nSpecifically, you cannot have two CNAME records with the same owner name (in this case \"www\".)",
               "createdAt": "2020-10-07T01:01:16Z",
-              "updatedAt": "2020-10-07T02:17:13Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             }
           ]
         },
@@ -19254,7 +19272,7 @@
               "originalPosition": 39,
               "body": "Yes.  The point is that only one of these exists in the RRset at any one time.  I'll try and clarify this.",
               "createdAt": "2020-10-07T02:10:39Z",
-              "updatedAt": "2020-10-07T02:17:13Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             }
           ]
         },
@@ -19274,7 +19292,7 @@
               "originalPosition": 39,
               "body": "Is the updated text better?",
               "createdAt": "2020-10-07T02:18:27Z",
-              "updatedAt": "2020-10-07T02:18:27Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
             }
           ]
         },
@@ -19294,11 +19312,69 @@
               "originalPosition": 51,
               "body": "updated",
               "createdAt": "2020-10-07T02:18:34Z",
-              "updatedAt": "2020-10-07T02:18:35Z"
+              "updatedAt": "2020-10-07T20:32:22Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0ODY2NDUx",
+          "commit": {
+            "abbreviatedOid": "4fd9942"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "There are some line length things here that need to be fixed, but they're minor.  The content looks good.",
+          "createdAt": "2020-10-08T14:49:38Z",
+          "updatedAt": "2020-10-08T14:58:59Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Probably also worth mentioning that the A/AAAA/HTTPS resolutions can follow different CNAMEs to different CDNs:\r\n- The client will properly handle the HTTPS record, but find the reference to a hostname it hasn't started resolving yet; this could be fixed by including the IP hints.\r\n- If only one CDN publishes HTTPS records, sometimes the client will receive NXDATA for the HTTPS query, but A/AAAA results for an ECH-capable CDN.",
+              "createdAt": "2020-10-08T14:49:38Z",
+              "updatedAt": "2020-10-08T14:58:59Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "If we need to be clearer, it might be worth moving the explanatory text from comments to regular prose, and having two distinct code blocks.  Also, this line and 1250 are too long to fit on a single line in a code block.",
+              "createdAt": "2020-10-08T14:51:37Z",
+              "updatedAt": "2020-10-08T14:58:59Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "This line is also too long for a code block; consider wrapping it.",
+              "createdAt": "2020-10-08T14:58:01Z",
+              "updatedAt": "2020-10-08T14:58:59Z"
             }
           ]
         }
       ]
+    },
+    {
+      "number": 272,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk5OTk1Nzg0",
+      "title": "Fix nits",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/272",
+      "state": "OPEN",
+      "author": "MikeBishop",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Remove some trailing whitespace, update ref from RFC 5226 to RFC 8126.",
+      "createdAt": "2020-10-08T15:08:39Z",
+      "updatedAt": "2020-10-08T15:08:39Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "4c4a85a91bd2264cd6d29c63b4743819bb40eca7",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "mbishop/ref_nit",
+      "headRefOid": "ecacdbf3dbb5c56c5fbf4730f7880a5d6d71f844",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
