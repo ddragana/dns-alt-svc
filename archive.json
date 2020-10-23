@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-08T15:09:02.237751+00:00",
+  "timestamp": "2020-10-23T15:33:22.608354+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -19191,13 +19191,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-06T23:22:56Z",
-      "updatedAt": "2020-10-08T14:58:59Z",
+      "updatedAt": "2020-10-23T15:32:17Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "a0b4a126baa81c6cc227c796d6826fdd06767d2f",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-multicdn",
-      "headRefOid": "4fd9942f9ca38c4e106a57a2111df1aa9b1c2caf",
+      "headRefOid": "31ddd3bb50e681ecad2ac46ffed3ef5f83af4810",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -19220,19 +19220,19 @@
               "originalPosition": 45,
               "body": "`\\t` leading to indentation weirdness",
               "createdAt": "2020-10-06T23:54:14Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             },
             {
               "originalPosition": 51,
               "body": "```suggestion\r\n     cdn1 300 IN HTTPS 1 h3pool alpn=h3 echconfig=\"123...\"\r\n```",
               "createdAt": "2020-10-07T00:14:17Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             },
             {
               "originalPosition": 51,
               "body": "A TTL of 300 on the HTTPS records seems low.",
               "createdAt": "2020-10-07T00:16:43Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         },
@@ -19252,7 +19252,7 @@
               "originalPosition": 39,
               "body": "This is illegal. RFC 1034 (and addition RFCs clarifying this) restrict the owner to having a single CNAME RR (and prohibit any other RRTYPE with the same owner as a CNAME).\r\nSpecifically, you cannot have two CNAME records with the same owner name (in this case \"www\".)",
               "createdAt": "2020-10-07T01:01:16Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         },
@@ -19272,7 +19272,7 @@
               "originalPosition": 39,
               "body": "Yes.  The point is that only one of these exists in the RRset at any one time.  I'll try and clarify this.",
               "createdAt": "2020-10-07T02:10:39Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         },
@@ -19292,7 +19292,7 @@
               "originalPosition": 39,
               "body": "Is the updated text better?",
               "createdAt": "2020-10-07T02:18:27Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         },
@@ -19312,7 +19312,7 @@
               "originalPosition": 51,
               "body": "updated",
               "createdAt": "2020-10-07T02:18:34Z",
-              "updatedAt": "2020-10-07T20:32:22Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         },
@@ -19332,19 +19332,19 @@
               "originalPosition": 86,
               "body": "Probably also worth mentioning that the A/AAAA/HTTPS resolutions can follow different CNAMEs to different CDNs:\r\n- The client will properly handle the HTTPS record, but find the reference to a hostname it hasn't started resolving yet; this could be fixed by including the IP hints.\r\n- If only one CDN publishes HTTPS records, sometimes the client will receive NXDATA for the HTTPS query, but A/AAAA results for an ECH-capable CDN.",
               "createdAt": "2020-10-08T14:49:38Z",
-              "updatedAt": "2020-10-08T14:58:59Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             },
             {
               "originalPosition": 39,
               "body": "If we need to be clearer, it might be worth moving the explanatory text from comments to regular prose, and having two distinct code blocks.  Also, this line and 1250 are too long to fit on a single line in a code block.",
               "createdAt": "2020-10-08T14:51:37Z",
-              "updatedAt": "2020-10-08T14:58:59Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             },
             {
               "originalPosition": 62,
               "body": "This line is also too long for a code block; consider wrapping it.",
               "createdAt": "2020-10-08T14:58:01Z",
-              "updatedAt": "2020-10-08T14:58:59Z"
+              "updatedAt": "2020-10-23T15:32:17Z"
             }
           ]
         }
@@ -19355,26 +19355,42 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk5OTk1Nzg0",
       "title": "Fix nits",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/272",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "MikeBishop",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Remove some trailing whitespace, update ref from RFC 5226 to RFC 8126.",
       "createdAt": "2020-10-08T15:08:39Z",
-      "updatedAt": "2020-10-08T15:08:39Z",
+      "updatedAt": "2020-10-08T15:22:12Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "4c4a85a91bd2264cd6d29c63b4743819bb40eca7",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "mbishop/ref_nit",
       "headRefOid": "ecacdbf3dbb5c56c5fbf4730f7880a5d6d71f844",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-08T15:22:12Z",
+      "mergedAt": "2020-10-08T15:22:12Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "25e540f5374700b68057bf6fc3c2c7daa8fb8599"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0ODk5NDgy",
+          "commit": {
+            "abbreviatedOid": "ecacdbf"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-08T15:21:49Z",
+          "updatedAt": "2020-10-08T15:21:49Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
