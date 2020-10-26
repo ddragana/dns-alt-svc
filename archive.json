@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-23T15:33:22.608354+00:00",
+  "timestamp": "2020-10-26T19:03:58.999346+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -1461,7 +1461,7 @@
       "id": "MDU6SXNzdWU1MzM0Mjc2NTQ=",
       "title": "Should HTTPSSVC make certificate errors fatal?",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/87",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "davidben",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -1470,8 +1470,8 @@
       "labels": [],
       "body": "Elsewhere, HTTPSSVC's redirect was referred to as HSTS and it occurred to me we're missing one of HSTS's properties. It redirects and then it directs the browser to suppress the certificate click through button.\r\n\r\nWe could do something similar and say that HTTPS connections made off an HTTPSSVC record are assumed to have a competent TLS config and don't get a bypass button.",
       "createdAt": "2019-12-05T15:36:40Z",
-      "updatedAt": "2019-12-19T16:50:21Z",
-      "closedAt": "2019-12-19T16:50:21Z",
+      "updatedAt": "2020-10-26T18:54:19Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "davidben",
@@ -1493,6 +1493,62 @@
           "body": "It needs to be part of the standard because the standard talks about what HTTPSSVC *means*. Right now it means \"you can assume my http URL is a redirect\". Does it also mean \"you can assume my https URL is sensible\"?\r\n\r\nThe point of standards is to promote interoperability. That means we need to all agree on the meanings of things.\r\n\r\nMy inclination is that it should mean this. A promise (up to DNS TTL) to deploy certificates correctly is not that much of a tall order over the existing promise to do https, and we nudge the web a little more towards security.",
           "createdAt": "2019-12-14T00:26:12Z",
           "updatedAt": "2019-12-14T00:26:56Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "@bemasc pointed me to this thread after I espoused the misconception that HTTPS RRs do not make certificate errors fatal, and I want to make an attempt to reverse this decision. :)\r\n\r\nI know this is an unpopular opinion, but I think it was a mistake to have STS make cert errors fatal. Cert errors are overwhelmingly false positives, and many of them are caused by client or network misconfigurations that the server operator has no control over (misconfigured middleboxes, captive portals, bad client clocks, etc.). I suspect that the vast majority of server operators who enable STS don't know about the cert error behavior, and even if they do I suspect they don't know about the vast array of (mostly benign) conditions outside their control that can cause cert errors.\r\n\r\nI think that the default configuration of HTTPS RRs should be to not make cert errors fatal, but maybe that can be a separate lever that site owners can configure. (Ideally I'd like STS to work this way too, but not sure if we can go back now.)",
+          "createdAt": "2020-10-26T16:58:21Z",
+          "updatedAt": "2020-10-26T16:58:21Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "I don't think IETF should be encouraging domain owners to make HTTPS protections bypassable unless we have a strong indication that not providing that option will significantly reduce adoption of HTTPS records.  We should be moving the internet to a world where connections are secure and validated, not one where we keep skipping those protections and allowing bad client/network misconfigurations to continue.\r\n\r\nDoes your knowledge on the subject lead you to believe such adoption reduction would be significant?",
+          "createdAt": "2020-10-26T17:28:54Z",
+          "updatedAt": "2020-10-26T17:28:54Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "I don't have data on whether it would impede adoption. However, I do know that false positive cert errors caused by non-server misconfigurations persist despite multiple person-years of effort to systematically drive them down (https://research.google/pubs/pub46359/). Also note that in modern browsers, cert errors are quite difficult to bypass, leading to low clickthrough rates that could probably be driven down even further with a bit more effort. For example users adhere to ~80% of cert errors in Chrome on Windows.",
+          "createdAt": "2020-10-26T17:46:12Z",
+          "updatedAt": "2020-10-26T17:46:12Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "Wouldn't low bypass clickthrough rates be a point against allowing bypass for new HTTPS technologies? Seems that in the vast majority of cases, users don't know how or don't want to bypass it, and that hasn't stopped HTTPS use on the internet.  The users either take action to fix the client/network misconfiguration, or they stop using the website/network that they can't connect to.\r\n\r\nThe only usecase I see being supported by allowing website control of this is for websites that want to give their users directions on how to bypass the error page.  I don't think that is a usecase IETF should be encouraging or further enabling as it seems terrible for user security.  If those websites want to keep doing that, I think it would be best that they do so without access to the shiny new toys like HTTPS records.",
+          "createdAt": "2020-10-26T17:59:31Z",
+          "updatedAt": "2020-10-26T17:59:31Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "Another possible interpretation of the low clickthrough rate is that more technical people who are able to reason correctly about the risks click through errors, while others leave the site. The point of having a bypass is that the browser can't always know what's in the user's best interest. That doesn't mean we can add an option/setting for every single security decision, but we already have this one. We (where by \"we\" here I mean a browser, not IETF) have a budget for how much we can inconvenience users in the name of security, and I'd rather spend that budget elsewhere (e.g., putting stronger warnings on http:// pages).\r\n\r\n> The only usecase I see being supported by allowing website control of this is for websites that want to give their users directions on how to bypass the error page\r\n\r\nI don't think that's a relevant use case here; the user wouldn't be able to access the website for directions until they click through the cert error, at which point they wouldn't need the directions.",
+          "createdAt": "2020-10-26T18:17:03Z",
+          "updatedAt": "2020-10-26T18:17:03Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@estark37 Hah, clearly I should have checked with you here before writing the PR. :-)\r\n\r\nThat's a good point that certificate warnings have better adherence now than when HSTS was designed. I probably haven't sufficiently updated my thoughts for this new world. Let me try thinking aloud for a bit and maybe you can tell me where we're not on the same page?\r\n\r\nI've generally considered the certificate click-through a legacy mistake, but one we're now stuck with because it has made self-signed or otherwise invalid certs *just barely* feasible enough that sites will do it, with the expectation that users bypass the error. Thus any ratchet we can use to get out of the hole and discourage \"intentional\" certificate errors is worthwhile. (After all, we don't ask users to validate syntax errors in HTTP/2 frames.)\r\n\r\nI like the framing of certificate errors from server- and non-server-related causes. That seems a good way to think about it, since it tells us whether to fix via client behavior (clickthrough or otherwise), or via server behavior (server gives us an opt-in and/or opt-out signal telling us they're good at such-and-such).\r\n\r\nFor non-server-related causes, it seems to me neither a server opt-in nor opt-out bit would make sense because the server doesn't have any information about the cause. Of the examples (misconfigured middleboxes, captive portals, bad client clocks, etc.), it seems a cert bypass isn't a good remedy for captive portals anyway. We don't actually want or need to give HTTPS-breaking privileges to the network, just separately get through the captive portal flow. So improving the captive portal flow seems preferable to me.\r\n\r\nI'm not such about the other two. In the bad clock case, I would have hoped the bad clock interstitial (which we should trigger independent of HSTS/HTTPSRR) would solve it, but I take it we still have gaps? Misconfigured middleboxes are interesting... my inclination would be that the enterprise or AV in question should be configuring this stuff rather than relying on users bypassing *every single* certificate error. Or is there another flow here?\r\n\r\nFor server-related causes, I guess it's a question of whether we think the ecosystem is ready enough for a particular commitment to be viable by default. A commitment to use a publicly trusted CA rather than relying on bypass seems pretty solid to me. I would like for sites to also be on the hook for resolving expired certificates (better yet, automate cert issuance!), but maybe we're not ready for that yet?",
+          "createdAt": "2020-10-26T18:28:18Z",
+          "updatedAt": "2020-10-26T18:31:44Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Something else that comes to mind: whatever server commitment we end up with, the text probably should be tweaked a bit. For something like the TLS 1.0/1.1 deprecation, we ended up with a temporarily bypassable error, as an intermediate step to removing the protocols entirely. I think HSTS/SVCB should *not* block those bypasses, yet the text doesn't account for it. Those bypasses are an artifact of the meaning of \"I promise to do HTTPS\" adjusting over time. While we're in the transition state, the prompt behavior should also be in the transition state.\r\n\r\n(Then again, unlike HSTS, SVCB does currently say SHOULD instead of MUST, so you could argue this case falls under the SHOULD. HSTS's text was maybe a bit prescriptive though. Ah well.)",
+          "createdAt": "2020-10-26T18:37:47Z",
+          "updatedAt": "2020-10-26T18:37:47Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "> (Then again, unlike HSTS, SVCB does currently say SHOULD instead of MUST, so you could argue this case falls under the SHOULD. HSTS's text was maybe a bit prescriptive though. Ah well.)\r\n\r\nI don't think we should add temporary transition complications to the text.  Being SHOULD instead of MUST is sufficient room for browsers to do any transition necessary.\r\n\r\nAnd you now give me two additional chains of thought on this subject:\r\n1. If the bypass is potentially something we're stuck with mostly just because we've always had it, how much does that factor apply to HTTPS records? Is this enough of a transition that, by setting up HTTPS records, sites are reasonably transitioning into a new way of doing things, potentially making that a reasonable point to disable the old legacy behavior? Or does the website transitioning things not matter, because to the user perspective, it's still just the same https:// websites and they're the ones (or at least the technical users among them that know how to bypass) being inconvenienced by any change.\r\n2. Is this something websites should have control over at all (through HSTS, HTTPS records, etc)? If most of these reasons to allow bypass have nothing to do with the specific website, should those websites have any control over inconveniencing the technical risk-knowledgable users that want to bypass? Should a website's knowledge of things such as being a security-sensitive website override that? If there's no reason for websites to influence it, this almost seems something unnecessary for IETF to deal with in specs like this, leaving it up to browsers to either implement or not a bypass for all cert errors.",
+          "createdAt": "2020-10-26T18:54:18Z",
+          "updatedAt": "2020-10-26T18:54:18Z"
         }
       ]
     },
@@ -4409,7 +4465,7 @@
       "id": "MDU6SXNzdWU3MTE1MzkxMjc=",
       "title": "TargetName must match RRTYPE",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/251",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4418,8 +4474,8 @@
       "labels": [],
       "body": "\u00a7 2.4.1 says:\r\n\r\n```\r\nThe primary purpose of AliasMode is to allow aliasing at the zone apex, where\r\nCNAME is not allowed. In AliasMode, TargetName MUST be the name of\r\na domain that has SVCB, AAAA, or A records. It MUST NOT be equal to\r\nthe owner name, as this would cause a loop.\r\n```\r\n\r\nFrom my reading, this should say that TargetName MUST be the name of a domain that has AAAA or A records, or records of the same RRTYPE as that of the source record. The intro says that\r\n\r\n```\r\nAll behaviors described as applying to the SVCB RR also apply to the\r\nHTTPS RR unless explicitly stated otherwise.\r\n```\r\n\r\nbut that does not (and should not) explicitly encourage readers to alpha-substitute HTTPS for SVCB in every normative statement.",
       "createdAt": "2020-09-29T23:57:42Z",
-      "updatedAt": "2020-10-02T02:05:40Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-23T20:40:10Z",
+      "closedAt": "2020-10-23T20:40:10Z",
       "comments": [
         {
           "author": "bemasc",
@@ -4427,6 +4483,13 @@
           "body": "Brian Dickson also found that line confusing, for a different reason (bottom of [this email](https://mailarchive.ietf.org/arch/msg/dnsop/_Qb7Hsn1NjTJx2UTkdS-KeYIpF0/)).  We should rephrase.",
           "createdAt": "2020-10-01T01:44:30Z",
           "updatedAt": "2020-10-01T01:44:30Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This was fixed in #224 ",
+          "createdAt": "2020-10-23T20:40:10Z",
+          "updatedAt": "2020-10-23T20:40:10Z"
         }
       ]
     },
@@ -4558,7 +4621,7 @@
       "labels": [],
       "body": "To avoid the problem SSL/TLS had for years with ambiguity re: the CN in the presence of the SAN extension, you should clearly state somewhere that when SVCB is available for an authority endpoint, the legacy defaults (hostname on port 80/443) must never be used as a fallback or as part of a pool of options for the client. That, or explain clearly the justification for the current design choice.",
       "createdAt": "2020-09-30T00:12:27Z",
-      "updatedAt": "2020-10-02T14:48:25Z",
+      "updatedAt": "2020-10-23T20:21:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -4602,6 +4665,13 @@
           "body": "Conclusion: Remove the item number on this requirement.",
           "createdAt": "2020-10-02T14:48:20Z",
           "updatedAt": "2020-10-02T14:48:20Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Update: Step 5 should be updated so its purpose is clearer and it has normative strength.  Leaving the 4->5 fallback as SHOULD.",
+          "createdAt": "2020-10-23T20:21:07Z",
+          "updatedAt": "2020-10-23T20:21:07Z"
         }
       ]
     },
@@ -4610,7 +4680,7 @@
       "id": "MDU6SXNzdWU3MTM3OTg2NjA=",
       "title": "Multi-CDN example",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/264",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -4619,9 +4689,17 @@
       "labels": [],
       "body": "We need a good example of how to do multi-CDN without copying information into the customer zone.  It seems like the recommendation here will likely be phrased in terms of having multiple zone files.",
       "createdAt": "2020-10-02T17:51:14Z",
-      "updatedAt": "2020-10-02T17:51:14Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2020-10-23T20:40:50Z",
+      "closedAt": "2020-10-23T20:40:50Z",
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #271 ",
+          "createdAt": "2020-10-23T20:40:50Z",
+          "updatedAt": "2020-10-23T20:40:50Z"
+        }
+      ]
     },
     {
       "number": 266,
@@ -4672,10 +4750,12 @@
       "author": "brian-peter-dickson",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "proposed to close"
+      ],
       "body": "The stuff in Appendix A.1 is both moot and confusing.\r\n\r\nIf I understand correctly (after having to read and cross-reference many parts of this document, the ALPN RFC(s), and the IANA table for ALPN), the following is the case:\r\nNO ALPN IDs HAVE EMBEDDED COMMAS.\r\nThus, there is NO need for quoted commas in any ALPN.\r\nAnd, no other values (single or multi) have (or allow) embedded commas.\r\n\r\nCan we please dispense with all of the fancy things showing how to quote commas and how to interpret quoted commas?\r\nIf necessary, place a caveat into the IANA table that ALPN values MUST NOT contain commas in their ID.\r\n\r\nThis reduces ALPN to wire format of one or more <length>string (where length is a single octet), and the presentation format is simply a comma-separated list of strings, possibly enclosed in quotes, with no other quoting necessary.\r\n\r\nThe SvcParameters object itself is, in presentation format, a list separated with whitespace, so there is no ambiguity between the list within an ALPN, and the list of SvcParameters. \r\n\r\nPlease?\r\n\r\nIt would be nice to have a much simpler document, and much easier task for implementing things.",
       "createdAt": "2020-10-03T00:46:21Z",
-      "updatedAt": "2020-10-06T17:29:39Z",
+      "updatedAt": "2020-10-23T16:04:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -4691,6 +4771,13 @@
           "body": "This is similar in spirit to RFC 7838; while all ALPN tokens currently defined can be expressed as `tchar` for use in HTTP headers, that RFC still has to define how to percent-encode bytes which are not `tchar`s because they remain legal bytes for ALPN.  While modifying the ALPN registry would simplify that, I doubt that's something that should be driven through dnsop.\r\n\r\nIf you bring a draft to the TLS WG adding such restrictions to ALPN and it is adopted and progressed, we will happily update this draft to rely on that simplification, though.",
           "createdAt": "2020-10-06T17:29:39Z",
           "updatedAt": "2020-10-06T17:29:39Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Agreed with @MikeBishop and @bemasc .  I've never been a fan of this, but we're stuck with it unless we want to restrict to only support a subset of ALPNs.",
+          "createdAt": "2020-10-23T16:04:09Z",
+          "updatedAt": "2020-10-23T16:04:09Z"
         }
       ]
     }
@@ -18979,7 +19066,7 @@
       "labels": [],
       "body": "This change removes the First Come First Served registration policy\r\nand the Expert Review policy, and combines them into a single\r\nSpecification Required range, with guidelines for what constitutes a\r\nminimal specification.  The goal of this change is to avoid zone file\r\nincompatibilities that could arise from the registration of keys whose\r\npresentation format is poorly documented.",
       "createdAt": "2020-10-02T02:53:17Z",
-      "updatedAt": "2020-10-02T03:19:16Z",
+      "updatedAt": "2020-10-23T20:37:14Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "516c06fbd141e2fc1566be2f43207b32eb74b73a",
@@ -18997,6 +19084,20 @@
           "body": "@tfpauly FYI, this is relevant to a discussion we had.  Assuming this policy is considered permissible by IANA, I think it should provide a better balance of flexibility and interoperability.\r\n",
           "createdAt": "2020-10-02T03:17:25Z",
           "updatedAt": "2020-10-02T03:17:25Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "TODO: replace \"empty string\" with \"invalid\".",
+          "createdAt": "2020-10-23T20:36:03Z",
+          "updatedAt": "2020-10-23T20:36:03Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@moonshiner (as chair) Do you think these new proposed IANA instructions will work?  For example, is the \"temporary\" instruction something that IANA can process?",
+          "createdAt": "2020-10-23T20:37:14Z",
+          "updatedAt": "2020-10-23T20:37:14Z"
         }
       ],
       "reviews": []
@@ -19009,17 +19110,19 @@
       "state": "OPEN",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "bemasc"
+      ],
       "labels": [],
-      "body": "Apart from editorial changes, this reduces the strength of the \"alias\r\ntarget fallback\" recommendation from SHOULD to MAY.  (This is the case\r\nwhere an AliasMode record points to a ServiceMode RRSet but all\r\nconnection attempts have failed, and the client still wants to follow\r\nthe alias.)\r\n\r\nFixes #256",
+      "body": "Editorial changes only, to clarify the fallback sequence.\r\n\r\nFixes #256",
       "createdAt": "2020-10-02T17:13:57Z",
-      "updatedAt": "2020-10-02T17:15:56Z",
+      "updatedAt": "2020-10-26T19:03:23Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-fallback",
-      "headRefOid": "40e9a19bed32eef6bc7de7b6273591d8cb80ee15",
+      "headRefOid": "5afc6a6e9139325775e0fde00e20bf95336f9917",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -19165,7 +19268,7 @@
       "labels": [],
       "body": "Fixes #247",
       "createdAt": "2020-10-06T19:56:04Z",
-      "updatedAt": "2020-10-06T19:56:04Z",
+      "updatedAt": "2020-10-23T15:53:40Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
@@ -19177,32 +19280,56 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1Nzk5MTkw",
+          "commit": {
+            "abbreviatedOid": "3a33136"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "We should define \"value list\" somewhere before its first use. (currently on line 749)  Otherwise it just gets used there (and subsequently) with no context.  Is \"value list\" a first class thing?",
+          "createdAt": "2020-10-23T15:53:40Z",
+          "updatedAt": "2020-10-23T15:53:40Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 271,
       "id": "MDExOlB1bGxSZXF1ZXN0NDk4ODg3ODgz",
       "title": "Add an example of a full Multi-CDN configuration.",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/271",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-06T23:22:56Z",
-      "updatedAt": "2020-10-23T15:32:17Z",
+      "updatedAt": "2020-10-23T20:09:05Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "a0b4a126baa81c6cc227c796d6826fdd06767d2f",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-multicdn",
-      "headRefOid": "31ddd3bb50e681ecad2ac46ffed3ef5f83af4810",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "49b208c7eb3a68860eb045fe38312f5c539da727",
+      "closedAt": "2020-10-23T20:09:05Z",
+      "mergedAt": "2020-10-23T20:09:05Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "bb15e308f810af241ab6576d9300ac66afab7a53"
+      },
+      "comments": [
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Any remaining issues?",
+          "createdAt": "2020-10-23T15:48:27Z",
+          "updatedAt": "2020-10-23T15:48:27Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzNDM2NzAx",
@@ -19220,19 +19347,19 @@
               "originalPosition": 45,
               "body": "`\\t` leading to indentation weirdness",
               "createdAt": "2020-10-06T23:54:14Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             },
             {
               "originalPosition": 51,
               "body": "```suggestion\r\n     cdn1 300 IN HTTPS 1 h3pool alpn=h3 echconfig=\"123...\"\r\n```",
               "createdAt": "2020-10-07T00:14:17Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             },
             {
               "originalPosition": 51,
               "body": "A TTL of 300 on the HTTPS records seems low.",
               "createdAt": "2020-10-07T00:16:43Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
         },
@@ -19252,7 +19379,7 @@
               "originalPosition": 39,
               "body": "This is illegal. RFC 1034 (and addition RFCs clarifying this) restrict the owner to having a single CNAME RR (and prohibit any other RRTYPE with the same owner as a CNAME).\r\nSpecifically, you cannot have two CNAME records with the same owner name (in this case \"www\".)",
               "createdAt": "2020-10-07T01:01:16Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
         },
@@ -19272,7 +19399,7 @@
               "originalPosition": 39,
               "body": "Yes.  The point is that only one of these exists in the RRset at any one time.  I'll try and clarify this.",
               "createdAt": "2020-10-07T02:10:39Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
         },
@@ -19292,7 +19419,7 @@
               "originalPosition": 39,
               "body": "Is the updated text better?",
               "createdAt": "2020-10-07T02:18:27Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
         },
@@ -19312,7 +19439,7 @@
               "originalPosition": 51,
               "body": "updated",
               "createdAt": "2020-10-07T02:18:34Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
         },
@@ -19323,30 +19450,108 @@
           },
           "author": "MikeBishop",
           "authorAssociation": "OWNER",
-          "state": "CHANGES_REQUESTED",
+          "state": "DISMISSED",
           "body": "There are some line length things here that need to be fixed, but they're minor.  The content looks good.",
           "createdAt": "2020-10-08T14:49:38Z",
-          "updatedAt": "2020-10-08T14:58:59Z",
+          "updatedAt": "2020-10-23T19:24:24Z",
           "comments": [
             {
               "originalPosition": 86,
               "body": "Probably also worth mentioning that the A/AAAA/HTTPS resolutions can follow different CNAMEs to different CDNs:\r\n- The client will properly handle the HTTPS record, but find the reference to a hostname it hasn't started resolving yet; this could be fixed by including the IP hints.\r\n- If only one CDN publishes HTTPS records, sometimes the client will receive NXDATA for the HTTPS query, but A/AAAA results for an ECH-capable CDN.",
               "createdAt": "2020-10-08T14:49:38Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             },
             {
               "originalPosition": 39,
               "body": "If we need to be clearer, it might be worth moving the explanatory text from comments to regular prose, and having two distinct code blocks.  Also, this line and 1250 are too long to fit on a single line in a code block.",
               "createdAt": "2020-10-08T14:51:37Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             },
             {
               "originalPosition": 62,
               "body": "This line is also too long for a code block; consider wrapping it.",
               "createdAt": "2020-10-08T14:58:01Z",
-              "updatedAt": "2020-10-23T15:32:17Z"
+              "updatedAt": "2020-10-23T16:06:10Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1Nzk0NjQz",
+          "commit": {
+            "abbreviatedOid": "aa3889a"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T15:48:01Z",
+          "updatedAt": "2020-10-23T15:48:02Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Added notes about this",
+              "createdAt": "2020-10-23T15:48:01Z",
+              "updatedAt": "2020-10-23T16:06:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1ODAzNjI2",
+          "commit": {
+            "abbreviatedOid": "aa3889a"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T15:59:05Z",
+          "updatedAt": "2020-10-23T16:01:03Z",
+          "comments": [
+            {
+              "originalPosition": 115,
+              "body": "```suggestion\r\n* If not all CDNs publish HTTPS records, clients will sometimes\r\n```",
+              "createdAt": "2020-10-23T15:59:05Z",
+              "updatedAt": "2020-10-23T16:06:10Z"
+            },
+            {
+              "originalPosition": 107,
+              "body": "```suggestion\r\n* The A, AAAA, HTTPS resolutions are independent lookups so clients may\r\n```",
+              "createdAt": "2020-10-23T15:59:46Z",
+              "updatedAt": "2020-10-23T16:06:10Z"
+            },
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\r\n     $ORIGIN customer.example.\r\n     www 900 IN CNAME customer.svc2.example.\r\n\r\n     ; and yet other times it contains:\r\n     $ORIGIN customer.example.\r\n```",
+              "createdAt": "2020-10-23T16:00:45Z",
+              "updatedAt": "2020-10-23T16:06:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1ODE1MDY2",
+          "commit": {
+            "abbreviatedOid": "49b208c"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-23T16:13:51Z",
+          "updatedAt": "2020-10-23T16:13:51Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTQ4NzU1",
+          "commit": {
+            "abbreviatedOid": "49b208c"
+          },
+          "author": "MikeBishop",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-23T19:28:39Z",
+          "updatedAt": "2020-10-23T19:28:39Z",
+          "comments": []
         }
       ]
     },
