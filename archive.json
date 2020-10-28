@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-26T19:03:58.999346+00:00",
+  "timestamp": "2020-10-28T19:46:06.106212+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -1470,7 +1470,7 @@
       "labels": [],
       "body": "Elsewhere, HTTPSSVC's redirect was referred to as HSTS and it occurred to me we're missing one of HSTS's properties. It redirects and then it directs the browser to suppress the certificate click through button.\r\n\r\nWe could do something similar and say that HTTPS connections made off an HTTPSSVC record are assumed to have a competent TLS config and don't get a bypass button.",
       "createdAt": "2019-12-05T15:36:40Z",
-      "updatedAt": "2020-10-26T18:54:19Z",
+      "updatedAt": "2020-10-27T21:30:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -1549,6 +1549,83 @@
           "body": "> (Then again, unlike HSTS, SVCB does currently say SHOULD instead of MUST, so you could argue this case falls under the SHOULD. HSTS's text was maybe a bit prescriptive though. Ah well.)\r\n\r\nI don't think we should add temporary transition complications to the text.  Being SHOULD instead of MUST is sufficient room for browsers to do any transition necessary.\r\n\r\nAnd you now give me two additional chains of thought on this subject:\r\n1. If the bypass is potentially something we're stuck with mostly just because we've always had it, how much does that factor apply to HTTPS records? Is this enough of a transition that, by setting up HTTPS records, sites are reasonably transitioning into a new way of doing things, potentially making that a reasonable point to disable the old legacy behavior? Or does the website transitioning things not matter, because to the user perspective, it's still just the same https:// websites and they're the ones (or at least the technical users among them that know how to bypass) being inconvenienced by any change.\r\n2. Is this something websites should have control over at all (through HSTS, HTTPS records, etc)? If most of these reasons to allow bypass have nothing to do with the specific website, should those websites have any control over inconveniencing the technical risk-knowledgable users that want to bypass? Should a website's knowledge of things such as being a security-sensitive website override that? If there's no reason for websites to influence it, this almost seems something unnecessary for IETF to deal with in specs like this, leaving it up to browsers to either implement or not a bypass for all cert errors.",
           "createdAt": "2020-10-26T18:54:18Z",
           "updatedAt": "2020-10-26T18:54:18Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "> @estark37 Hah, clearly I should have checked with you here before writing the PR. :-)\r\n> \r\n> That's a good point that certificate warnings have better adherence now than when HSTS was designed. I probably haven't sufficiently updated my thoughts for this new world. Let me try thinking aloud for a bit and maybe you can tell me where we're not on the same page?\r\n> \r\n> I've generally considered the certificate click-through a legacy mistake, but one we're now stuck with because it has made self-signed or otherwise invalid certs _just barely_ feasible enough that sites will do it, with the expectation that users bypass the error. Thus any ratchet we can use to get out of the hole and discourage \"intentional\" certificate errors is worthwhile. (After all, we don't ask users to validate syntax errors in HTTP/2 frames.)\r\n\r\nInteresting, I don't think of cert clickthroughs as a legacy mistake. Definitely the IE6-style ones where OK was the default button, but not modern cert errors where the bypass exists but is quite buried. If we really thought that having a bypass at all was a legacy mistake, I don't actually think it would be that hard to get rid of it for all sites, and I'd rather go at it directly that way rather than add more knobs and edge cases to the decision tree of whether a cert error is bypassable.\r\n\r\nI don't think we can exactly measure how many sites are using invalid certs expecting that users will click through, but my guess is that it's not common. In 2017, <=1% of all cert errors were self-signed certs. With modern cert errors making it so hard to click through, I doubt tons of sites are relying on users doing it.\r\n\r\nI agree that we can't expose user settings for every security decision, but I do think settings make sense in some scenarios, and it's more of an art than a science deciding where it makes sense to have them. In my mind a big factor in the decision is the complexity of implementing/maintaining the setting, and as I mentioned above, if a goal is to get rid of the complexity of maintaining the setting, then I'd rather go about it directly for all cert errors -- which would also exert more influence over the server operators who knowingly deploy bad certs (since who knows how many of such server operators would use HTTPS RRs).\r\n\r\n> \r\n> I like the framing of certificate errors from server- and non-server-related causes. That seems a good way to think about it, since it tells us whether to fix via client behavior (clickthrough or otherwise), or via server behavior (server gives us an opt-in and/or opt-out signal telling us they're good at such-and-such).\r\n>\r\n\r\nTo clarify my stance, clickthrough is definitely not the *ideal* fix for any situation, but it could be the right tradeoff for some users in some situations in today's reality, and I don't predict that HTTPS RRs would change today's reality much.\r\n \r\n> For non-server-related causes, it seems to me neither a server opt-in nor opt-out bit would make sense because the server doesn't have any information about the cause. Of the examples (misconfigured middleboxes, captive portals, bad client clocks, etc.), it seems a cert bypass isn't a good remedy for captive portals anyway. We don't actually want or need to give HTTPS-breaking privileges to the network, just separately get through the captive portal flow. So improving the captive portal flow seems preferable to me.\r\n\r\nImproving the captive portal flow would be great, but it's not really clear how to do it. Despite significant cycles spent to build OS- and browser-level captive portal detection, people still encounter cert errors while connecting to captive portals allllll the time, and often don't know what else to do but click through.\r\n\r\n> \r\n> I'm not such about the other two. In the bad clock case, I would have hoped the bad clock interstitial (which we should trigger independent of HSTS/HTTPSRR) would solve it, but I take it we still have gaps? Misconfigured middleboxes are interesting... my inclination would be that the enterprise or AV in question should be configuring this stuff rather than relying on users bypassing _every single_ certificate error. Or is there another flow here?\r\n\r\nBad clock interstitial works well in Chrome, but I don't think most browsers do that. And yeah, in the misconfigured middlebox case, as in every other misconfig case, it sure isn't the ideal outcome for users to bypass every cert error, but realistically that's what some people do now. If we want to go after improving the middlebox situation, for example, I think we'd be better off going after that situation directly rather than adding UX and implementation complexity to go after it indirectly by tying it to HTTPS RRs.\r\n\r\n> \r\n> For server-related causes, I guess it's a question of whether we think the ecosystem is ready enough for a particular commitment to be viable by default. A commitment to use a publicly trusted CA rather than relying on bypass seems pretty solid to me. I would like for sites to also be on the hook for resolving expired certificates (better yet, automate cert issuance!), but maybe we're not ready for that yet?\r\n\r\nIn a world where we knew that all cert errors were caused by server errors, then yeah I think removing the bypass would make a lot more sense. But right now many cert errors aren't caused by server errors, and with STS/HTTPS RRs, the server is making a decision on behalf of the user without actually knowing anything about what caused the error and what the user's situation is.",
+          "createdAt": "2020-10-26T19:23:43Z",
+          "updatedAt": "2020-10-26T19:32:07Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "> > (Then again, unlike HSTS, SVCB does currently say SHOULD instead of MUST, so you could argue this case falls under the SHOULD. HSTS's text was maybe a bit prescriptive though. Ah well.)\r\n> \r\n> I don't think we should add temporary transition complications to the text. Being SHOULD instead of MUST is sufficient room for browsers to do any transition necessary.\r\n> \r\n> And you now give me two additional chains of thought on this subject:\r\n> \r\n> 1. If the bypass is potentially something we're stuck with mostly just because we've always had it, how much does that factor apply to HTTPS records? Is this enough of a transition that, by setting up HTTPS records, sites are reasonably transitioning into a new way of doing things, potentially making that a reasonable point to disable the old legacy behavior? Or does the website transitioning things not matter, because to the user perspective, it's still just the same https:// websites and they're the ones (or at least the technical users among them that know how to bypass) being inconvenienced by any change.\r\n> 2. Is this something websites should have control over at all (through HSTS, HTTPS records, etc)? If most of these reasons to allow bypass have nothing to do with the specific website, should those websites have any control over inconveniencing the technical risk-knowledgable users that want to bypass? Should a website's knowledge of things such as being a security-sensitive website override that? If there's no reason for websites to influence it, this almost seems something unnecessary for IETF to deal with in specs like this, leaving it up to browsers to either implement or not a bypass for all cert errors.\r\n\r\nI think #2 is a very reasonable stance to take, in line with the priority of constituencies. A good chunk of cert errors have absolutely nothing to do with the server -- the server can't fix them, the server doesn't know what the right decision is for the user -- so why does the server get to have a say over how they're presented to the user? And if our position is that cert errors should never be bypassable, HTTPS RRs seems like an indirect way to go about accomplishing that.",
+          "createdAt": "2020-10-26T19:30:05Z",
+          "updatedAt": "2020-10-26T19:30:05Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What are the options here?  Top contenders seem to be:\r\n1) Leave it as the current \"SHOULD NOT\" bypass cert errors\r\n2) Weaken this to a \"MAY\" but add in a new parameter that explicitly says MUST NOT bypass\r\n",
+          "createdAt": "2020-10-26T20:36:16Z",
+          "updatedAt": "2020-10-26T20:36:16Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "I think the direction of this conversation might be leaning more into:\r\n\r\n3. Weaken to \"MAY\" or maybe even remove any mention of the topic, and do not add any parameter to allow even optional server control.  Just leave it a matter for client implementors to decide how to communicate cert errors to users and whether or not the client UI will allow bypassing, same as any other HTTPS connections (except HSTS).",
+          "createdAt": "2020-10-26T20:42:09Z",
+          "updatedAt": "2020-10-26T20:42:09Z"
+        },
+        {
+          "author": "moonshiner",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thinking as a dns person, In either case, we should have an example  in the appendix where we show a setup where this would return cert errors.  DNS people like to stand up broken DNS zones as examples. \r\n\r\nAny user issue will hit a DNS person first who should have guidance on head scratching. But I also admit I need to reread this whole thread.  thanks @estark37 ! \r\n\r\n",
+          "createdAt": "2020-10-26T20:52:08Z",
+          "updatedAt": "2020-10-26T20:52:08Z"
+        },
+        {
+          "author": "govhero",
+          "authorAssociation": "NONE",
+          "body": "lll.....\n\n.c\n\nc\n....c.c...v\n\n\u043f\u043d, 26 \u043e\u043a\u0442. 2020 \u0433., 21:58 Emily Stark <notifications@github.com>:\n\n> @bemasc <https://github.com/bemasc> pointed me to this thread after I\n> espoused the misconception that HTTPS RRs do not make certificate errors\n> fatal, and I want to make an attempt to reverse this decision. :)\n>\n> I know this is an unpopular opinion, but I think it was a mistake to have\n> STS make cert errors fatal. Cert errors are overwhelmingly false positives,\n> and many of them are caused by client or network misconfigurations that the\n> server operator has no control over (misconfigured middleboxes, captive\n> portals, bad client clocks, etc.). I suspect that the vast majority of\n> server operators who enable STS don't know about the cert error behavior,\n> and even if they do I suspect they don't know about the vast array of\n> (mostly benign) conditions outside their control that can cause cert errors.\n>\n> I think that the default configuration of HTTPS RRs should be to not make\n> cert errors fatal, but maybe that can be a separate lever that site owners\n> can configure. (Ideally I'd like STS to work this way too, but not sure if\n> we can go back now.)\n>\n> \u2014\n> You are receiving this because you are subscribed to this thread.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/MikeBishop/dns-alt-svc/issues/87#issuecomment-716686941>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/ARLKQAVYMDSWQM24OL3W2ZDSMWTD3ANCNFSM4JV3OBFA>\n> .\n>\n",
+          "createdAt": "2020-10-26T21:19:35Z",
+          "updatedAt": "2020-10-26T21:19:35Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Interesting, I don't think of cert clickthroughs as a legacy mistake. Definitely the IE6-style ones where OK was the default button, but not modern cert errors where the bypass exists but is quite buried. If we really thought that having a bypass at all was a legacy mistake, I don't actually think it would be that hard to get rid of it for all sites, and I'd rather go at it directly that way rather than add more knobs and edge cases to the decision tree of whether a cert error is bypassable.\r\n>\r\n> I don't think we can exactly measure how many sites are using invalid certs expecting that users will click through, but my guess is that it's not common. In 2017, <=1% of all cert errors were self-signed certs. With modern cert errors making it so hard to click through, I doubt tons of sites are relying on users doing it.\r\n\r\nAnecdotally, we get quite a lot of networking bug reports where people expect to bypass certificate errors. Sometimes it's developers whose workflow involves bypassing a local cert error. Sometimes it's a weird networking product that's, distressingly, _designed_ to have the user bypass some error. :-( Even if all non-server issues were fixed, I suspect we'd still have difficulties getting rid of this bypass. Thus, the aim to ratchet away the invalid server configurations.\r\n\r\nRegarding it being legacy or not, I think my ideal state would be one where the bypass wasn't there. Browsers never ask humans to evaluate X.509 certificates, and, through that, the expectation would be on technologies to work without expecting humans to do this. (A nice self-reenforcing cycle to avoid regression.) Maybe automated certificate issuance would be standard so expired certs aren't a problem. Maybe developer use cases would go through better tooling. Maybe this would incentivize captive portals to work correctly with detectors, rather than hide from them.\r\n\r\nWe are, of course, not in the state right now. This is extra annoying because the self-reenforcing cycle is against improvement rather than regression. And so the hope is increasingly broad ratcheting strategies would help us get there and, in the meantime, carve off chunks of the web where the risks are mitigated.\r\n\r\nBut ratcheting works best when the obstacle is a property of the server. It sounds like it's no longer the primary bottleneck and maybe we need to address those before we can broaden the ratchet. :-/ On the plus side, the improved error dialogs also make the problem less severe. (Annoyingly, saying \"HTTPS RRs are a commitment not to rely on a bypass for server-related reasons\" is kinda pointless if the non-server reasons prevent us from enforcing it. Unenforced parts of protocols are mostly fiction.)\r\n\r\n> Improving the captive portal flow would be great, but it's not really clear how to do it. Despite significant cycles spent to build OS- and browser-level captive portal detection, people still encounter cert errors while connecting to captive portals allllll the time, and often don't know what else to do but click through.\r\n\r\nHrm. I don't suppose we've considered something truly absurd like just including a link to captive portal HTTP URL from the link? Users clicking through certificate errors in hopes of hitting a captive portal seems the worst possible outcome. :-/ But I recognize that's proposing to build a thing that doesn't actually exist right now, so not very helpful in resolving this issue.\r\n\r\n> Bad clock interstitial works well in Chrome, but I don't think most browsers do that.\r\n\r\nThat's fair. Although I would advocate those browsers do that. If bad clock interstitials fully mitigate this (do they?), I'm quite happy to declare that one solved and rejoice. :-)\r\n\r\n> And yeah, in the misconfigured middlebox case, as in every other misconfig case, it sure isn't the ideal outcome for users to bypass every cert error, but realistically that's what some people do now. If we want to go after improving the middlebox situation, for example, I think we'd be better off going after that situation directly rather than adding UX and implementation complexity to go after it indirectly by tying it to HTTPS RRs.\r\n\r\nI think I agree with everything you say here, except the conclusion. In my mind, the aim of tying something to HTTPS RRs is not to address middlebox misconfigurations, but to address server misconfigurations. The connection to non-server misconfigurations like middleboxes is, if they're too common, they make this strategy less viable.",
+          "createdAt": "2020-10-26T21:28:07Z",
+          "updatedAt": "2020-10-26T21:29:20Z"
+        },
+        {
+          "author": "brian-peter-dickson",
+          "authorAssociation": "NONE",
+          "body": "Minor nit on the conversation/thread:\nThe term \"server\" has the potential to be ambiguous.\nCould we try to stick to more precise terms, like \"web server\", \"authority\nDNS server\", \"recursive DNS server (aka resolver\", \"CA server\",\n\"authoritative DNSSEC server\", \"DNSSEC signer\", or any other sort of server\nthat might be in play (e.g. OCSP, etc.)?\nThanks,\nBrian\n\nOn Mon, Oct 26, 2020 at 2:28 PM David Benjamin <notifications@github.com>\nwrote:\n\n> Interesting, I don't think of cert clickthroughs as a legacy mistake.\n> Definitely the IE6-style ones where OK was the default button, but not\n> modern cert errors where the bypass exists but is quite buried. If we\n> really thought that having a bypass at all was a legacy mistake, I don't\n> actually think it would be that hard to get rid of it for all sites, and\n> I'd rather go at it directly that way rather than add more knobs and edge\n> cases to the decision tree of whether a cert error is bypassable.\n>\n> I don't think we can exactly measure how many sites are using invalid\n> certs expecting that users will click through, but my guess is that it's\n> not common. In 2017, <=1% of all cert errors were self-signed certs. With\n> modern cert errors making it so hard to click through, I doubt tons of\n> sites are relying on users doing it.\n>\n> Anecdotally, we get quite a lot of networking bug reports where people\n> expect to bypass certificate errors. Sometimes it's developers whose\n> workflow involves bypassing a local cert error. Sometimes it's a weird\n> networking product that's, distressingly, *designed* to have the user\n> bypass some error. :-( Even if all non-server issues were fixed, I suspect\n> we'd still have difficulties getting rid of this bypass. Thus, the aim to\n> ratchet away the invalid server configurations.\n>\n> Regarding it being legacy or not, I think my ideal state would be one\n> where the bypass wasn't there. Browsers never ask humans to evaluate X.509\n> certificates, and, through that, the expectation would be on technologies\n> to work without expecting humans to do this. (A nice self-reenforcing cycle\n> to avoid regression.) Maybe automated certificate issuance would be\n> standard so expired certs aren't a problem. Maybe developer use cases would\n> go through better tooling. Maybe this would incentivize captive portals to\n> work correctly with detectors, rather than hide from them.\n>\n> We are, of course, not in the state right now. This is extra annoying\n> because the self-reenforcing cycle is against improvement rather than\n> regression. And so the hope is increasingly broad ratcheting strategies\n> would help us get there and, in the meantime, carve off chunks of the web\n> where the risks are mitigated.\n>\n> But ratcheting works best when the obstacle is a property of the server.\n> It sounds like it's no longer the primary bottleneck and maybe we need to\n> address those before we can broaden the ratchet. :-/ On the plus side, the\n> improved error dialogs also make the problem less severe, so it's less\n> critical. (Annoyingly, saying \"HTTPS RRs are a commitment not to rely on a\n> bypass for server-related reasons\" is kinda pointless if the non-server\n> reasons prevent us from enforcing it. Unenforced parts of protocols are\n> mostly fiction.)\n>\n> Improving the captive portal flow would be great, but it's not really\n> clear how to do it. Despite significant cycles spent to build OS- and\n> browser-level captive portal detection, people still encounter cert errors\n> while connecting to captive portals allllll the time, and often don't know\n> what else to do but click through.\n>\n> Hrm. I don't suppose we've considered something truly absurd like just\n> including a link to captive portal HTTP URL from the link? Users clicking\n> through certificate errors in hopes of hitting a captive portal seems the\n> worst possible outcome. :-/ But I recognize that's proposing to build a\n> thing that doesn't actually exist right now, so not very helpful in\n> resolving this issue.\n>\n> Bad clock interstitial works well in Chrome, but I don't think most\n> browsers do that.\n>\n> That's fair. Although I would advocate those browsers do that. If bad\n> clock interstitials fully mitigate this (do they?), I'm quite happy to\n> declare that one solved and rejoice. :-)\n>\n> And yeah, in the misconfigured middlebox case, as in every other misconfig\n> case, it sure isn't the ideal outcome for users to bypass every cert error,\n> but realistically that's what some people do now. If we want to go after\n> improving the middlebox situation, for example, I think we'd be better off\n> going after that situation directly rather than adding UX and\n> implementation complexity to go after it indirectly by tying it to HTTPS\n> RRs.\n>\n> I think I agree with everything you say here, except the same conclusion.\n> In my mind, the aim of tying something to HTTPS RRs is not to address\n> middlebox misconfigurations, but to address server misconfigurations. The\n> connection to non-server misconfigurations like middleboxes is, if they're\n> too common, they make this strategy less viable.\n>\n> \u2014\n> You are receiving this because you are subscribed to this thread.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/MikeBishop/dns-alt-svc/issues/87#issuecomment-716833972>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/ABPFI3KP3W5HJFMG2SXQOOLSMXSXLANCNFSM4JV3OBFA>\n> .\n>\n",
+          "createdAt": "2020-10-26T22:35:30Z",
+          "updatedAt": "2020-10-26T22:35:30Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sounds good. Being precise doesn't hurt.\r\n\r\nTo help with any existing ambiguity, the only relevant servers in this thread are HTTPS servers. They're what HTTPS records describe. The contents of the HTTPS record doesn't have much bearing on the other servers related to DNS. (Well, I suppose if your recursive is DoH and you use an HTTPS record to find it, this text applies to there too. But I'm not aware of any client that allows users to bypass HTTPS errors when establishing a connection to the DoH resolver, so it's moot.)",
+          "createdAt": "2020-10-26T22:46:19Z",
+          "updatedAt": "2020-10-26T22:46:19Z"
+        },
+        {
+          "author": "fl1ger",
+          "authorAssociation": "NONE",
+          "body": "Moin!\r\n\r\nSo this probably goes sideways, but as a DNS person my main feature for HTTPS was to solve the CNAME at the APEX problem. As a test to the current clients out there I setup a couple of DNS resource records to try that and a bunch of web server to figure out where stuff ends up. As I was lazy I used regular port 80 http servers. And it worked with the current mostly Apple based clients (try bla42.de, https.bla42.de and hintdirect.bla42.de) . Now re reading the draft after this discussion it shouldn't, but I see no harm that it does and agree that we should not demand STS outright, but make it configurable via an option.\r\n\r\nSo long\r\n-Ralf\r\n",
+          "createdAt": "2020-10-27T16:23:15Z",
+          "updatedAt": "2020-10-27T16:23:15Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "Note that I believe this issue is mostly regarding just the behavior of whether clients can allow bypassing certificate errors via user action on error pages, or if the HTTP->HTTPS upgrade feature of HTTPS records of should follow the example of HSTS and require strictly terminating on cert errors with any option of bypass.  Sounds like you're talking about making the upgrade functionality in-general optional.  That's a different discussion, and there's already a separate bug for it: #100",
+          "createdAt": "2020-10-27T21:30:24Z",
+          "updatedAt": "2020-10-27T21:30:24Z"
         }
       ]
     },
@@ -4330,7 +4407,7 @@
       "id": "MDU6SXNzdWU3MTE1MzEyOTk=",
       "title": "Clarify presentation format for unrecognized keys",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/247",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4339,8 +4416,8 @@
       "labels": [],
       "body": "\u00a7 2.1 says:\r\n\r\n```\r\nUnrecognized keys are represented in presentation format as\r\n\"keyNNNNN\" where NNNNN is the numeric value of the key type without\r\nleading zeros. SvcParams in this form are always treated as single-\r\nvalued, and the decoded \"value\" SHALL be used as its wire format\r\nencoding.\r\n```\r\n\r\nDoes this mean an unvalued key (empty value) would be presented as `keyNNNNN=`?",
       "createdAt": "2020-09-29T23:33:57Z",
-      "updatedAt": "2020-10-02T15:26:34Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-26T20:22:05Z",
+      "closedAt": "2020-10-26T20:22:05Z",
       "comments": [
         {
           "author": "bemasc",
@@ -4503,11 +4580,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
+        "proposed to close",
         "wg"
       ],
       "body": "\u00a7 2.5.2 says:\r\n\r\n```\r\nFor ServiceMode SVCB RRs, if TargetName has the value \".\", then the\r\nowner name of this record MUST be used as the effective TargetName.\r\n```\r\n\r\nThis makes sense for HTTPS and any future child RRTYPES that eschew Attrleafs, but it doesn't make a lot of sense for owner names with Attrleafs. Wouldn't it make sense for `.` to refer to the bare domain with the Attrleafs stripped?",
       "createdAt": "2020-09-30T00:00:03Z",
-      "updatedAt": "2020-10-02T14:40:44Z",
+      "updatedAt": "2020-10-26T20:24:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -4537,6 +4615,13 @@
           "body": "This will only become a issue for clients that are not aware of this expected behaviour and the operator uses \".\" for the target name.\r\n\r\nApple has implicitly committed to shipping a fix for this if it is changed by releasing code against a draft.  Additionally iOS users are relatively quick to apply updates.  I would not be worried about making a change like this.",
           "createdAt": "2020-09-30T02:31:05Z",
           "updatedAt": "2020-09-30T02:31:05Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Per discussion, we're proposing to close this as a wontfix.  It is a nice feature but adds complexity and corner cases and is not necessary.  (There was a little WG support, but only a little.)",
+          "createdAt": "2020-10-26T20:23:54Z",
+          "updatedAt": "2020-10-26T20:23:54Z"
         }
       ]
     },
@@ -4780,6 +4865,22 @@
           "updatedAt": "2020-10-23T16:04:09Z"
         }
       ]
+    },
+    {
+      "number": 273,
+      "id": "MDU6SXNzdWU3Mjk4OTE5NTA=",
+      "title": "Update acknowledgements",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/273",
+      "state": "OPEN",
+      "author": "enygren",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We should take a pass through Acknowledgments and add in people who have been commenting and involved but who are not yet listed.  Partial list:\r\n\r\n* Mark Andrews\r\n* Emily Stark\r\n* Eric Orth\r\n* Kyle Rose\r\n* Craig Taylor\r\n* Dan McArdle\r\n\r\nWho else am I mising?  (Feel free to add yourself to this list.)",
+      "createdAt": "2020-10-26T20:43:33Z",
+      "updatedAt": "2020-10-26T20:43:33Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -19111,12 +19212,12 @@
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
-        "bemasc"
+        "enygren"
       ],
       "labels": [],
       "body": "Editorial changes only, to clarify the fallback sequence.\r\n\r\nFixes #256",
       "createdAt": "2020-10-02T17:13:57Z",
-      "updatedAt": "2020-10-26T19:03:23Z",
+      "updatedAt": "2020-10-27T15:10:58Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
@@ -19127,7 +19228,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@squarooticus FYI, this is the change based on your suggestion in #256.",
+          "createdAt": "2020-10-26T20:25:13Z",
+          "updatedAt": "2020-10-26T20:25:13Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -19261,25 +19370,35 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk4ODAwNTU1",
       "title": "Move multi-value references into the keys",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/270",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #247",
       "createdAt": "2020-10-06T19:56:04Z",
-      "updatedAt": "2020-10-23T15:53:40Z",
+      "updatedAt": "2020-10-26T20:22:05Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-multivalue",
-      "headRefOid": "3a33136e9078bd2a87f7f2c87562c7051470fb34",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "5148c97edf76733baf6c90194465e85b646008e3",
+      "closedAt": "2020-10-26T20:22:05Z",
+      "mergedAt": "2020-10-26T20:22:05Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "1515e3d3124a10c85d71664eb6ad470a7a97d995"
+      },
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OK, I added a definition to try to make \"value-list\" a first-class term.",
+          "createdAt": "2020-10-26T20:20:22Z",
+          "updatedAt": "2020-10-26T20:20:22Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1Nzk5MTkw",
@@ -19292,6 +19411,19 @@
           "body": "We should define \"value list\" somewhere before its first use. (currently on line 749)  Otherwise it just gets used there (and subsequently) with no context.  Is \"value list\" a first class thing?",
           "createdAt": "2020-10-23T15:53:40Z",
           "updatedAt": "2020-10-23T15:53:40Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE3MTQ0OTM5",
+          "commit": {
+            "abbreviatedOid": "5148c97"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-26T20:21:59Z",
+          "updatedAt": "2020-10-26T20:21:59Z",
           "comments": []
         }
       ]
