@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-28T19:46:06.106212+00:00",
+  "timestamp": "2020-10-29T16:06:31.792862+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -1470,7 +1470,7 @@
       "labels": [],
       "body": "Elsewhere, HTTPSSVC's redirect was referred to as HSTS and it occurred to me we're missing one of HSTS's properties. It redirects and then it directs the browser to suppress the certificate click through button.\r\n\r\nWe could do something similar and say that HTTPS connections made off an HTTPSSVC record are assumed to have a competent TLS config and don't get a bypass button.",
       "createdAt": "2019-12-05T15:36:40Z",
-      "updatedAt": "2020-10-27T21:30:24Z",
+      "updatedAt": "2020-10-28T22:48:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1626,6 +1626,34 @@
           "body": "Note that I believe this issue is mostly regarding just the behavior of whether clients can allow bypassing certificate errors via user action on error pages, or if the HTTP->HTTPS upgrade feature of HTTPS records of should follow the example of HSTS and require strictly terminating on cert errors with any option of bypass.  Sounds like you're talking about making the upgrade functionality in-general optional.  That's a different discussion, and there's already a separate bug for it: #100",
           "createdAt": "2020-10-27T21:30:24Z",
           "updatedAt": "2020-10-27T21:30:24Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi all.  I've proposed a middle-ground \"no recourse\" policy in #274; please take a look.  That proposal is based on the notion that there are some errors that almost-certainly reflect a server misconfiguration, and we can reasonably ask servers using this new RR type to make sure not to be misconfigured in this way.\r\n\r\nThis is a compromise: it's a small ratchet step, but it doesn't do much for security on its own.  It doesn't add knobs, but it does add edge cases.\r\n\r\nPlease comment ASAP.  The draft deadline is Monday, and I'd like to get this settled in time to get a new draft out.",
+          "createdAt": "2020-10-28T20:10:12Z",
+          "updatedAt": "2020-10-28T20:10:12Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm not thrilled by PR #274.  I'm not sure why expiry is a no-recourse error by totally invalid certs are not.  What attacks does this guard against?  (Either way, it may be worth separating out the \"without recourse\" from the \"terminate the connection\" to make it clear that the latter is a MUST but that providing a recourse to the user is something that the U-A may wish to consider based on current best practices.)",
+          "createdAt": "2020-10-28T20:49:12Z",
+          "updatedAt": "2020-10-28T20:49:12Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Expiry is a no-recourse error because it's _definitely_ the server's fault, and the point of this section is that the server is promising to have working HTTPS.  A middlebox can't cause an expiry error.  Totally invalid certs could be a middlebox, so we leave the question of user recourse in that case entirely to the client.\r\n\r\nThis doesn't meaningfully guard against any attacks.  It's not a security measure on its own.  It's a \"situation simplification\" measure.  If we can reduce the number of cases where an escape hatch is offered, we'll have fewer cases to tackle in the future.  If we eventually close them all, then perhaps we can claim a security improvement.\r\n\r\nI should say that I have no strong opinion on what the draft should say on this point.  I'm just looking for a position that can command consensus.",
+          "createdAt": "2020-10-28T21:08:13Z",
+          "updatedAt": "2020-10-28T21:08:13Z"
+        },
+        {
+          "author": "estark37",
+          "authorAssociation": "NONE",
+          "body": "> Expiry is a no-recourse error because it's definitely the server's fault, and the point of this section is that the server is promising to have working HTTPS. A middlebox can't cause an expiry error.\r\n\r\nYou'd think so, but alas this isn't true. See Section 7.2 of https://storage.googleapis.com/pub-tools-public-publication-data/pdf/04822a2487f3cd27ff92dbfddf42d947acdc4257.pdf for an example where an AV product was installing and MITMing with an expired root. More generally, misconfigured client clocks can cause expired cert errors; we remediate this in Chrome with a custom error page, but not all browsers do that, and that wouldn't have helped with the case in Section 7.2 anyway.\r\n\r\nI'd suggest that no-user-recourse should just be a MAY, without any SHOULDs attached to it. If the ecosystem subsequently changes such that ratcheting down on server-caused errors becomes palatable without causing too much user pain for the non-server-caused error situations (as @davidben is imagining, I think), then UAs could start removing user recourse at that point.",
+          "createdAt": "2020-10-28T22:48:26Z",
+          "updatedAt": "2020-10-28T22:48:26Z"
         }
       ]
     },
@@ -4373,16 +4401,24 @@
       "id": "MDU6SXNzdWU2OTQyODMyMTg=",
       "title": "Address open TODO in spec",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/240",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "moonshiner",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "\r\nCurrently in the spec:\r\n\r\nTODO: do we also want to reserve a range for greasing?\r\n\r\n",
       "createdAt": "2020-09-06T07:51:58Z",
-      "updatedAt": "2020-09-06T07:51:58Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2020-10-29T15:10:56Z",
+      "closedAt": "2020-10-29T15:10:56Z",
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Removed in #233.  However, I would appreciate your review (@moonshiner) on #262, which attempts to simplify the IANA registry rules.",
+          "createdAt": "2020-10-29T15:10:53Z",
+          "updatedAt": "2020-10-29T15:10:53Z"
+        }
+      ]
     },
     {
       "number": 246,
@@ -19167,13 +19203,13 @@
       "labels": [],
       "body": "This change removes the First Come First Served registration policy\r\nand the Expert Review policy, and combines them into a single\r\nSpecification Required range, with guidelines for what constitutes a\r\nminimal specification.  The goal of this change is to avoid zone file\r\nincompatibilities that could arise from the registration of keys whose\r\npresentation format is poorly documented.",
       "createdAt": "2020-10-02T02:53:17Z",
-      "updatedAt": "2020-10-23T20:37:14Z",
+      "updatedAt": "2020-10-29T16:05:33Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "516c06fbd141e2fc1566be2f43207b32eb74b73a",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-iana",
-      "headRefOid": "88c9ba64d87aff6d856fc017c219c86353cce9ec",
+      "headRefOid": "aed1798ab6774b422a879adadb0da9f75cab135e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -19728,6 +19764,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 274,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTExNzk2NjA3",
+      "title": "Relax the \"no recourse\" policy for HTTPS-RR-HSTS",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/274",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change adjusts the requirements to require termination without\r\nrecourse only on connections where the client can be reasonably sure\r\nthat it is talking to the actual server, not a middlebox.  This reflects\r\nthe view that the server can and should vouch for its own correct\r\nconfiguration, but the client is better positioned to judge how to\r\nhandle middlebox-related failures.\r\n\r\nFixes #87",
+      "createdAt": "2020-10-28T19:46:42Z",
+      "updatedAt": "2020-10-28T19:46:42Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1515e3d3124a10c85d71664eb6ad470a7a97d995",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-recourse",
+      "headRefOid": "76dc567c970f2a91557729ecbb3b28f7cb246deb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
