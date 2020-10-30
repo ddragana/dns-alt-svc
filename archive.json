@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-29T16:06:31.792862+00:00",
+  "timestamp": "2020-10-30T03:15:52.086845+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4916,6 +4916,24 @@
       "createdAt": "2020-10-26T20:43:33Z",
       "updatedAt": "2020-10-26T20:43:33Z",
       "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 275,
+      "id": "MDU6SXNzdWU3MzI0NzM0Mjc=",
+      "title": "Document additional information leak in Security Considerations",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/275",
+      "state": "CLOSED",
+      "author": "davidben",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "Looking at components of a URL, today the DNS resolver only learns the hostname component. It does not learn the scheme, port, or path. SVCB changes this and now additionally leaks the scheme and port to the DNS resolver.\r\n\r\nI don't think this is a big deal (ports are uncommon and scheme+port is visible to the network anyway). Also we arguably don't leak the scheme for http vs https since http still needs to do a query to evaluate the upgrade. But we probably should mention this in Security Considerations for completeness.",
+      "createdAt": "2020-10-29T16:35:36Z",
+      "updatedAt": "2020-10-30T03:15:16Z",
+      "closedAt": "2020-10-30T03:15:16Z",
       "comments": []
     }
   ],
@@ -19203,13 +19221,13 @@
       "labels": [],
       "body": "This change removes the First Come First Served registration policy\r\nand the Expert Review policy, and combines them into a single\r\nSpecification Required range, with guidelines for what constitutes a\r\nminimal specification.  The goal of this change is to avoid zone file\r\nincompatibilities that could arise from the registration of keys whose\r\npresentation format is poorly documented.",
       "createdAt": "2020-10-02T02:53:17Z",
-      "updatedAt": "2020-10-29T16:05:33Z",
+      "updatedAt": "2020-10-29T18:45:23Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
-      "baseRefOid": "516c06fbd141e2fc1566be2f43207b32eb74b73a",
+      "baseRefOid": "1515e3d3124a10c85d71664eb6ad470a7a97d995",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-iana",
-      "headRefOid": "aed1798ab6774b422a879adadb0da9f75cab135e",
+      "headRefOid": "e076984d5952d9c260260cf74de3b553f5c8c539",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -19253,7 +19271,7 @@
       "labels": [],
       "body": "Editorial changes only, to clarify the fallback sequence.\r\n\r\nFixes #256",
       "createdAt": "2020-10-02T17:13:57Z",
-      "updatedAt": "2020-10-27T15:10:58Z",
+      "updatedAt": "2020-10-30T03:13:18Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
@@ -19273,7 +19291,34 @@
           "updatedAt": "2020-10-26T20:25:13Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwMzQ5MTU0",
+          "commit": {
+            "abbreviatedOid": "5afc6a6"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "On re-reading a few times, I think it would help to be crystal clear that if Step 5 is reached due to $SVCB_QNAME not having a SVCB record then the A/AAAA ($ADDR_QNAME) must be used instead.  In the section where we talk about DNSSEC it may make sense to say that authoritative answers (NODATA/NOERROR and NXDOMAIN) for SVCB records are acceptable and should result in $ADDR_QNAME fallback.",
+          "createdAt": "2020-10-30T03:07:56Z",
+          "updatedAt": "2020-10-30T03:13:18Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\n5. At this point there are no usable ServiceMode records, either because $SVCB_QNAME has no SVCB records or because no SVCB records have acceptable parameters. In this case, clients SHALL connect to the\r\n```",
+              "createdAt": "2020-10-30T03:07:56Z",
+              "updatedAt": "2020-10-30T03:13:18Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n   If there are no usable ServiceMode records, clients MUST go to step 5.  If all attempts fail, clients SHOULD go to step 5 (except as noted in\r\n```",
+              "createdAt": "2020-10-30T03:10:09Z",
+              "updatedAt": "2020-10-30T03:13:19Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 265,
@@ -19790,6 +19835,48 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 276,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTEyNDkwOTM4",
+      "title": "Document additional information in DNS queries",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/276",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #275",
+      "createdAt": "2020-10-29T18:52:25Z",
+      "updatedAt": "2020-10-30T03:15:17Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1515e3d3124a10c85d71664eb6ad470a7a97d995",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-leak",
+      "headRefOid": "bb2869fd25e159aae84b51e539a632e1cac22fc6",
+      "closedAt": "2020-10-30T03:15:17Z",
+      "mergedAt": "2020-10-30T03:15:16Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "d6c150627b93268df59bd87c575fed6ec60d2608"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwMzUxMTUy",
+          "commit": {
+            "abbreviatedOid": "bb2869f"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-30T03:15:11Z",
+          "updatedAt": "2020-10-30T03:15:11Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
