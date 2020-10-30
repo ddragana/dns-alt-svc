@@ -2037,8 +2037,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    Thank you to Ian Swett, Ralf Weber, Jon Reed, Martin Thomson, Lucas
    Pardue, Ilari Liusvaara, Tim Wicinski, Tommy Pauly, Chris Wood, David
-   Benjamin, and others for their feedback and suggestions on this
-   draft.
+   Benjamin, Mark Andrews, Emily Stark, Eric Orth, Kyle Rose, Craig
+   Taylor, Dan McArdle, Brian Dickson, and others for their feedback and
+   suggestions on this draft.
 
 15.  References
 
@@ -2065,7 +2066,6 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    [DoH]      Hoffman, P. and P. McManus, "DNS Queries over HTTPS
               (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
               <https://www.rfc-editor.org/info/rfc8484>.
-
 
 
 
