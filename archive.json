@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-30T03:15:52.086845+00:00",
+  "timestamp": "2020-10-30T14:44:59.640435+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -19875,6 +19875,53 @@
           "createdAt": "2020-10-30T03:15:11Z",
           "updatedAt": "2020-10-30T03:15:11Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 277,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTEyNzMwMzkx",
+      "title": "Update acknowledgements",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/277",
+      "state": "OPEN",
+      "author": "enygren",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #273\r\n\r\n(It would be good for someone else to take a pass and add others as needed.\r\nShould we sort?  They are in no particular order.)",
+      "createdAt": "2020-10-30T03:18:36Z",
+      "updatedAt": "2020-10-30T14:44:34Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "d6c150627b93268df59bd87c575fed6ec60d2608",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "enygren-ack-1",
+      "headRefOid": "b9ff377189fc1988404011b28a4c31eccaad6ec2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzI2NzE3",
+          "commit": {
+            "abbreviatedOid": "35f8e61"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-10-30T14:33:56Z",
+          "updatedAt": "2020-10-30T14:34:17Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nCraig Taylor, Dan McArdle, Brian Dickson, and others for their feedback\r\n```",
+              "createdAt": "2020-10-30T14:33:57Z",
+              "updatedAt": "2020-10-30T14:44:34Z"
+            }
+          ]
         }
       ]
     }
