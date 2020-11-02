@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 3 May 2021                                            E. Nygren
+Expires: 6 May 2021                                            E. Nygren
                                                      Akamai Technologies
-                                                         30 October 2020
+                                                         2 November 2020
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,13 +49,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 May 2021.
+   This Internet-Draft will expire on 6 May 2021.
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 1]
+Schwartz, et al.           Expires 6 May 2021                   [Page 1]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 Copyright Notice
@@ -105,69 +105,69 @@ Table of Contents
      6.2.  "port"  . . . . . . . . . . . . . . . . . . . . . . . . .  20
      6.3.  "echconfig" . . . . . . . . . . . . . . . . . . . . . . .  20
      6.4.  "ipv4hint" and "ipv6hint" . . . . . . . . . . . . . . . .  21
-     6.5.  "mandatory" . . . . . . . . . . . . . . . . . . . . . . .  22
+   7.  ServiceMode RR compatibility and mandatory keys . . . . . . .  22
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 2]
+Schwartz, et al.           Expires 6 May 2021                   [Page 2]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
-   7.  Using SVCB with HTTPS and HTTP  . . . . . . . . . . . . . . .  22
-     7.1.  Query names for HTTPS RRs . . . . . . . . . . . . . . . .  23
-     7.2.  Relationship to Alt-Svc . . . . . . . . . . . . . . . . .  24
-       7.2.1.  ALPN usage  . . . . . . . . . . . . . . . . . . . . .  24
-       7.2.2.  Untrusted channel . . . . . . . . . . . . . . . . . .  24
-       7.2.3.  Cache lifetime  . . . . . . . . . . . . . . . . . . .  24
-       7.2.4.  Granularity . . . . . . . . . . . . . . . . . . . . .  25
-     7.3.  Interaction with Alt-Svc  . . . . . . . . . . . . . . . .  25
-     7.4.  Requiring Server Name Indication  . . . . . . . . . . . .  25
-     7.5.  HTTP Strict Transport Security  . . . . . . . . . . . . .  25
-     7.6.  HTTP-based protocols  . . . . . . . . . . . . . . . . . .  26
-   8.  SVCB/HTTPS RR parameter for ECH configuration . . . . . . . .  26
-     8.1.  Client behavior . . . . . . . . . . . . . . . . . . . . .  27
-     8.2.  Deployment considerations . . . . . . . . . . . . . . . .  27
-   9.  Zone Structures . . . . . . . . . . . . . . . . . . . . . . .  27
-     9.1.  Structuring zones for flexibility . . . . . . . . . . . .  27
-     9.2.  Structuring zones for performance . . . . . . . . . . . .  28
-     9.3.  Examples  . . . . . . . . . . . . . . . . . . . . . . . .  28
-       9.3.1.  Protocol enhancements . . . . . . . . . . . . . . . .  28
-       9.3.2.  Apex aliasing . . . . . . . . . . . . . . . . . . . .  28
-       9.3.3.  Parameter binding . . . . . . . . . . . . . . . . . .  29
-       9.3.4.  Multi-CDN . . . . . . . . . . . . . . . . . . . . . .  30
-       9.3.5.  Non-HTTPS uses  . . . . . . . . . . . . . . . . . . .  32
-   10. Interaction with other standards  . . . . . . . . . . . . . .  32
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  32
-   12. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  33
-   13. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  33
-     13.1.  SVCB RRType  . . . . . . . . . . . . . . . . . . . . . .  33
-     13.2.  HTTPS RRType . . . . . . . . . . . . . . . . . . . . . .  34
-     13.3.  New registry for Service Parameters  . . . . . . . . . .  34
-       13.3.1.  Procedure  . . . . . . . . . . . . . . . . . . . . .  34
-       13.3.2.  Initial contents . . . . . . . . . . . . . . . . . .  35
-     13.4.  Registry updates . . . . . . . . . . . . . . . . . . . .  36
-   14. Acknowledgments and Related Proposals . . . . . . . . . . . .  37
-   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
-     15.1.  Normative References . . . . . . . . . . . . . . . . . .  37
-     15.2.  Informative References . . . . . . . . . . . . . . . . .  40
-   Appendix A.  Decoding text in zone files  . . . . . . . . . . . .  41
-     A.1.  Decoding a value-list . . . . . . . . . . . . . . . . . .  41
-   Appendix B.  Comparison with alternatives . . . . . . . . . . . .  42
-     B.1.  Differences from the SRV RR type  . . . . . . . . . . . .  42
-     B.2.  Differences from the proposed HTTP record . . . . . . . .  42
-     B.3.  Differences from the proposed ANAME record  . . . . . . .  43
+   8.  Using SVCB with HTTPS and HTTP  . . . . . . . . . . . . . . .  22
+     8.1.  Query names for HTTPS RRs . . . . . . . . . . . . . . . .  23
+     8.2.  Relationship to Alt-Svc . . . . . . . . . . . . . . . . .  24
+       8.2.1.  ALPN usage  . . . . . . . . . . . . . . . . . . . . .  24
+       8.2.2.  Untrusted channel . . . . . . . . . . . . . . . . . .  24
+       8.2.3.  Cache lifetime  . . . . . . . . . . . . . . . . . . .  24
+       8.2.4.  Granularity . . . . . . . . . . . . . . . . . . . . .  25
+     8.3.  Interaction with Alt-Svc  . . . . . . . . . . . . . . . .  25
+     8.4.  Requiring Server Name Indication  . . . . . . . . . . . .  25
+     8.5.  HTTP Strict Transport Security  . . . . . . . . . . . . .  25
+     8.6.  HTTP-based protocols  . . . . . . . . . . . . . . . . . .  26
+   9.  SVCB/HTTPS RR parameter for ECH configuration . . . . . . . .  26
+     9.1.  Client behavior . . . . . . . . . . . . . . . . . . . . .  27
+     9.2.  Deployment considerations . . . . . . . . . . . . . . . .  27
+   10. Zone Structures . . . . . . . . . . . . . . . . . . . . . . .  27
+     10.1.  Structuring zones for flexibility  . . . . . . . . . . .  27
+     10.2.  Structuring zones for performance  . . . . . . . . . . .  28
+     10.3.  Examples . . . . . . . . . . . . . . . . . . . . . . . .  28
+       10.3.1.  Protocol enhancements  . . . . . . . . . . . . . . .  28
+       10.3.2.  Apex aliasing  . . . . . . . . . . . . . . . . . . .  28
+       10.3.3.  Parameter binding  . . . . . . . . . . . . . . . . .  29
+       10.3.4.  Multi-CDN  . . . . . . . . . . . . . . . . . . . . .  29
+       10.3.5.  Non-HTTPS uses . . . . . . . . . . . . . . . . . . .  31
+   11. Interaction with other standards  . . . . . . . . . . . . . .  32
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  32
+   13. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  33
+   14. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  33
+     14.1.  SVCB RRType  . . . . . . . . . . . . . . . . . . . . . .  33
+     14.2.  HTTPS RRType . . . . . . . . . . . . . . . . . . . . . .  33
+     14.3.  New registry for Service Parameters  . . . . . . . . . .  34
+       14.3.1.  Procedure  . . . . . . . . . . . . . . . . . . . . .  34
+       14.3.2.  Initial contents . . . . . . . . . . . . . . . . . .  34
+     14.4.  Registry updates . . . . . . . . . . . . . . . . . . . .  35
+   15. Acknowledgments and Related Proposals . . . . . . . . . . . .  36
+   16. References  . . . . . . . . . . . . . . . . . . . . . . . . .  36
+     16.1.  Normative References . . . . . . . . . . . . . . . . . .  36
+     16.2.  Informative References . . . . . . . . . . . . . . . . .  39
+   Appendix A.  Decoding text in zone files  . . . . . . . . . . . .  40
+     A.1.  Decoding a value-list . . . . . . . . . . . . . . . . . .  40
+   Appendix B.  Comparison with alternatives . . . . . . . . . . . .  41
+     B.1.  Differences from the SRV RR type  . . . . . . . . . . . .  41
+     B.2.  Differences from the proposed HTTP record . . . . . . . .  41
+     B.3.  Differences from the proposed ANAME record  . . . . . . .  42
      B.4.  Comparison with separate RR types for AliasMode and
-           ServiceMode . . . . . . . . . . . . . . . . . . . . . . .  43
-   Appendix C.  Change history . . . . . . . . . . . . . . . . . . .  43
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  46
+           ServiceMode . . . . . . . . . . . . . . . . . . . . . . .  42
+   Appendix C.  Change history . . . . . . . . . . . . . . . . . . .  42
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  45
 
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 3]
+Schwartz, et al.           Expires 6 May 2021                   [Page 3]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 1.  Introduction
@@ -201,14 +201,14 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    resource record that can be applied directly and efficiently to a
    wide range of services (Section 2).  The HTTPS RR is then defined as
    a special case of SVCB that improves efficiency and convenience for
-   use with HTTPS (Section 7) by avoiding the need for an Attrleaf label
-   [Attrleaf] (Section 7.1).  Other protocols with similar needs may
+   use with HTTPS (Section 8) by avoiding the need for an Attrleaf label
+   [Attrleaf] (Section 8.1).  Other protocols with similar needs may
    follow the pattern of HTTPS and assign their own SVCB-compatible RR
    types.
 
    All behaviors described as applying to the SVCB RR also apply to the
-   HTTPS RR unless explicitly stated otherwise.  Section 7 describes
-   additional behaviors specific to the HTTPS RR.  Apart from Section 7
+   HTTPS RR unless explicitly stated otherwise.  Section 8 describes
+   additional behaviors specific to the HTTPS RR.  Apart from Section 8
    and introductory examples, much of this document refers only to the
    SVCB RR, but those references should be taken to apply to SVCB,
    HTTPS, and any future SVCB-compatible RR types.
@@ -221,9 +221,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 4]
+Schwartz, et al.           Expires 6 May 2021                   [Page 4]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 1.1.  Goals of the SVCB RR
@@ -264,7 +264,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    *  Provide an HSTS-like indication [HSTS] signaling that the HTTPS
       scheme should be used instead of HTTP for this request (see
-      Section 7.5).
+      Section 8.5).
 
 1.2.  Overview of the SVCB RR
 
@@ -277,9 +277,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 5]
+Schwartz, et al.           Expires 6 May 2021                   [Page 5]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    The SVCB RR has two modes: AliasMode, which aliases a name to another
@@ -324,7 +324,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 1.3.  Parameter for Encrypted ClientHello
 
    This document also defines a parameter for Encrypted ClientHello
-   [ECH] keys.  See Section 8.
+   [ECH] keys.  See Section 9.
 
 
 
@@ -333,9 +333,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 6]
+Schwartz, et al.           Expires 6 May 2021                   [Page 6]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 1.4.  Terminology
@@ -380,7 +380,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    Other SVCB-compatible resource record types can also be defined as-
    needed.  In particular, the HTTPS RR (RR type 65) provides special
-   handling for the case of "https" origins as described in Section 7.
+   handling for the case of "https" origins as described in Section 8.
 
    SVCB RRs are extensible by a list of SvcParams, which are pairs
    consisting of a SvcParamKey and a SvcParamValue.  Each SvcParamKey
@@ -389,9 +389,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 7]
+Schwartz, et al.           Expires 6 May 2021                   [Page 7]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    both their presentation format and wire encoding (e.g., domain names,
@@ -411,7 +411,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    name, and the SvcParams are a whitespace-separated list, with each
    SvcParam consisting of a SvcParamKey=SvcParamValue pair or a
    standalone SvcParamKey.  SvcParamKeys are subject to IANA control
-   (Section 13.3).
+   (Section 14.3).
 
    Each SvcParamKey SHALL appear at most once in the SvcParams.  In
    presentation format, SvcParamKeys are lower-case alphanumeric
@@ -445,9 +445,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 8]
+Schwartz, et al.           Expires 6 May 2021                   [Page 8]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    SvcParams in presentation format MAY appear in any order, but keys
@@ -471,7 +471,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    series of SvcParamKey=SvcParamValue pairs, represented as:
 
    *  a 2 octet field containing the SvcParamKey as an integer in
-      network byte order.  (See Section 13.3.2 for the defined values.)
+      network byte order.  (See Section 14.3.2 for the defined values.)
 
    *  a 2 octet field containing the length of the SvcParamValue as an
       integer between 0 and 65535 in network byte order (but constrained
@@ -501,9 +501,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                   [Page 9]
+Schwartz, et al.           Expires 6 May 2021                   [Page 9]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 2.3.  SVCB query names
@@ -513,7 +513,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    prefixed with an underscore, resulting in a domain name like
    "_examplescheme.api.example.com.".  This follows the Attrleaf naming
    pattern [Attrleaf], so the scheme MUST be registered appropriately
-   with IANA (see Section 10).
+   with IANA (see Section 11).
 
    Protocol mapping documents MAY specify additional underscore-prefixed
    labels to be prepended.  For schemes that specify a port
@@ -522,7 +522,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    specified).  We term this behavior "Port Prefix Naming", and use it
    in the examples throughout this document.
 
-   See Section 7.1 for the HTTPS RR behavior.
+   See Section 8.1 for the HTTPS RR behavior.
 
    When a prior CNAME or SVCB record has aliased to a SVCB record, each
    RR shall be returned under its own owner name.
@@ -557,9 +557,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 10]
+Schwartz, et al.           Expires 6 May 2021                  [Page 10]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 2.4.1.  SvcPriority
@@ -613,9 +613,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 11]
+Schwartz, et al.           Expires 6 May 2021                  [Page 11]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    AliasMode is especially useful for SVCB-compatible RR types that do
@@ -669,9 +669,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 12]
+Schwartz, et al.           Expires 6 May 2021                  [Page 12]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 2.5.1.  AliasMode
@@ -714,27 +714,37 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
        additional prefixes) and loop back to step 2, subject to chain
        length limits and loop detection heuristics (see Section 3.1).
 
-   4.  If one or more ServiceMode records are returned for $SVCB_QNAME,
-       clients SHOULD select the highest-priority compatible record with
-       acceptable parameters.  This TargetName and SvcParams represent
-       the preferred endpoint.  If connection to this endpoint fails,
-       the client MAY try to connect using values from a lower-priority
-       record.  If all attempts fail, clients SHOULD go to step 5.
+   4.  If one or more "compatible" (Section 7) ServiceMode records are
+       returned for $SVCB_QNAME, clients SHOULD select the highest-
+       priority compatible record.  This record's TargetName and
+       SvcParams represent the preferred endpoint.  If connection to
+       this endpoint fails, the client SHOULD try to connect using
+       values from the next-highest-priority compatible record, etc.  If
+       all attempts fail, clients SHOULD go to step 5 (except as noted
+       in Section 9.1).
 
 
 
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 13]
+Schwartz, et al.           Expires 6 May 2021                  [Page 13]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
-   5.  Try to use the endpoint consisting of $ADDR_QNAME, the authority
-       endpoint's port number, and no SvcParams.
+   5.  At this point there are no usable ServiceMode records, because
 
-   6.  If all of the above connection attempts fail, clients MAY connect
-       to the authority endpoint.
+       *  there were no SVCB records found for $SVCB_QNAME, OR
+
+       *  all records found were incompatible with this client, OR
+
+       *  all connection attempts using ServiceMode records failed.
+
+       Accordingly, clients SHALL connect to the endpoint consisting of
+       $ADDR_QNAME, the authority endpoint's port number, and no
+       SvcParams.
+
+   If all of the above connection attempts fail, clients MAY connect to
+   the authority endpoint (except as noted in Section 3.1 and
+   Section 9.1).
 
    This procedure does not rely on any recursive or authoritative DNS
    server to comply with this specification or have any awareness of
@@ -751,10 +761,10 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    If a SVCB query results in a SERVFAIL error, transport error, or
    timeout, and DNS exchanges between the client and the recursive
    resolver are cryptographically protected (e.g. using TLS [DoT] or
-   HTTPS [DoH]), the client SHOULD NOT fall back to $ADDR_QNAME or the
-   authority endpoint (steps 5 and 6 above).  Otherwise, an active
-   attacker could mount a downgrade attack by denying the user access to
-   the SvcParams.
+   HTTPS [DoH]), the client SHOULD NOT fall back to $ADDR_QNAME (step 5
+   above) or the authority endpoint.  Otherwise, an active attacker
+   could mount a downgrade attack by denying the user access to the
+   SvcParams.
 
    A SERVFAIL error can occur if the domain is DNSSEC-signed, the
    recursive resolver is DNSSEC-validating, and the attacker is between
@@ -764,27 +774,21 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    responses, based on their size or other observable patterns.
 
    Similarly, if the client enforces DNSSEC validation on A/AAAA
-   responses, it SHOULD NOT fall back to steps 5 or 6 if the SVCB
-   response fails to validate.
+   responses, it SHOULD terminate the connection if a SVCB response
+   fails to validate.
+
+
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 14]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
 
    If the client is unable to complete SVCB resolution due to its chain
    length limit, the client SHOULD fall back to the authority endpoint,
    as if the origin's SVCB record did not exist.
-
-
-
-
-
-
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 14]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
 
 3.2.  Clients using a Proxy
 
@@ -833,13 +837,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 15]
+Schwartz, et al.           Expires 6 May 2021                  [Page 15]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 4.2.  Recursive resolvers
@@ -893,9 +893,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 16]
+Schwartz, et al.           Expires 6 May 2021                  [Page 16]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    When responding to a query that includes the DNSSEC OK bit
@@ -949,9 +949,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 17]
+Schwartz, et al.           Expires 6 May 2021                  [Page 17]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 5.2.  Generating and using incomplete responses
@@ -1005,9 +1005,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 18]
+Schwartz, et al.           Expires 6 May 2021                  [Page 18]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    The wire format value for "alpn" consists of at least one "alpn-id"
@@ -1061,9 +1061,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 19]
+Schwartz, et al.           Expires 6 May 2021                  [Page 19]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    With this procedure in place, an attacker who can modify DNS and
@@ -1105,7 +1105,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 6.3.  "echconfig"
 
    The SvcParamKey to enable Encrypted ClientHello (ECH) is "echconfig".
-   Its value is defined in Section 8.  It is applicable to most TLS-
+   Its value is defined in Section 9.  It is applicable to most TLS-
    based protocols.
 
    When publishing a record containing an "echconfig" parameter, the
@@ -1117,9 +1117,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 20]
+Schwartz, et al.           Expires 6 May 2021                  [Page 20]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    supported by a given client-facing server.  Thus, even with an
@@ -1173,12 +1173,12 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 21]
+Schwartz, et al.           Expires 6 May 2021                  [Page 21]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
-6.5.  "mandatory"
+7.  ServiceMode RR compatibility and mandatory keys
 
    In a ServiceMode RR, a SvcParamKey is considered "mandatory" if the
    RR will not function correctly for clients that ignore this
@@ -1189,7 +1189,8 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    mandatory keys that are present.
 
    A ServiceMode RR is considered "compatible" with a client if the
-   client implements support for all its mandatory keys.  If the SVCB
+   client recognizes all the mandatory keys, and their values indicate
+   that successful connection establishment is possible.  If the SVCB
    RRSet contains no compatible RRs, the client will generally act as if
    the RRSet is empty.
 
@@ -1215,7 +1216,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    SHOULD NOT appear in the list either.  (Including them wastes space
    and otherwise has no effect.)
 
-7.  Using SVCB with HTTPS and HTTP
+8.  Using SVCB with HTTPS and HTTP
 
    Use of any protocol with SVCB requires a protocol-specific mapping
    specification.  This section specifies the mapping for HTTPS and
@@ -1228,10 +1229,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 22]
+Schwartz, et al.           Expires 6 May 2021                  [Page 22]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    The HTTPS RR wire format and presentation format are identical to
@@ -1246,11 +1246,11 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    All the SvcParamKeys defined in Section 6 are permitted for use in
    HTTPS RRs.  The default set of ALPN IDs is the single value
-   "http/1.1".  The "automatically mandatory" keys (Section 6.5) are
+   "http/1.1".  The "automatically mandatory" keys (Section 7) are
    "port", "alpn", and "no-default-alpn".
 
    The presence of an HTTPS RR for an origin also indicates that all
-   HTTP resources are available over HTTPS, as discussed in Section 7.5.
+   HTTP resources are available over HTTPS, as discussed in Section 8.5.
    This allows HTTPS RRs to apply to pre-existing "http" scheme URLs,
    while ensuring that the client uses a secure and authenticated HTTPS
    connection.
@@ -1259,7 +1259,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Alternative Services proposed standard [AltSvc].  Clients and servers
    that implement HTTPS RRs are not required to implement Alt-Svc.
 
-7.1.  Query names for HTTPS RRs
+8.1.  Query names for HTTPS RRs
 
    The HTTPS RR uses Port Prefix Naming (Section 2.3), with one
    modification: if the scheme is "https" and the port is 443, then the
@@ -1277,7 +1277,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    SVCB.
 
    Clients always convert "http" URLs to "https" before performing an
-   HTTPS RR query using the process described in Section 7.5, so domain
+   HTTPS RR query using the process described in Section 8.5, so domain
    owners MUST NOT publish HTTPS RRs with a prefix of "_http".
 
 
@@ -1285,16 +1285,16 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 23]
+Schwartz, et al.           Expires 6 May 2021                  [Page 23]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    Note that none of these forms alter the HTTPS origin or authority.
    For example, clients MUST continue to validate TLS certificate
    hostnames based on the origin.
 
-7.2.  Relationship to Alt-Svc
+8.2.  Relationship to Alt-Svc
 
    Publishing a ServiceMode HTTPS RR in DNS is intended to be similar to
    transmitting an Alt-Svc field value over HTTPS, and receiving an
@@ -1302,13 +1302,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    HTTPS.  However, there are some differences in the intended client
    and server behavior.
 
-7.2.1.  ALPN usage
+8.2.1.  ALPN usage
 
    Unlike Alt-Svc Field Values, HTTPS RRs can contain multiple ALPN IDs,
    and clients are encouraged to offer additional ALPNs that they
    support (subject to security constraints).
 
-7.2.2.  Untrusted channel
+8.2.2.  Untrusted channel
 
    SVCB does not require or provide any assurance of authenticity.
    (DNSSEC signing and verification, which would provide such assurance,
@@ -1322,7 +1322,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    because this parameter is not safe to accept over an untrusted
    channel.
 
-7.2.3.  Cache lifetime
+8.2.3.  Cache lifetime
 
    There is no SvcParamKey corresponding to the Alt-Svc "ma" (max age)
    parameter.  Instead, server operators encode the expiration time in
@@ -1341,12 +1341,12 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 24]
+Schwartz, et al.           Expires 6 May 2021                  [Page 24]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
-7.2.4.  Granularity
+8.2.4.  Granularity
 
    Sending Alt-Svc over HTTP allows the server to tailor the Alt-Svc
    Field Value specifically to the client.  When using an HTTPS RR,
@@ -1354,7 +1354,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Therefore, HTTPS RRs are not suitable for uses that require single-
    client granularity.
 
-7.3.  Interaction with Alt-Svc
+8.3.  Interaction with Alt-Svc
 
    Clients that do not implement support for Encrypted ClientHello MAY
    skip the HTTPS RR query if a usable Alt-Svc value is available in the
@@ -1362,12 +1362,12 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    back to the HTTPS RR client connection procedure (Section 3).
 
    For clients that implement support for ECH, the interaction between
-   HTTPS RRs and Alt-Svc is described in Section 8.1.
+   HTTPS RRs and Alt-Svc is described in Section 9.1.
 
    This specification does not alter the DNS queries performed when
    connecting to an Alt-Svc hostname (typically A and/or AAAA only).
 
-7.4.  Requiring Server Name Indication
+8.4.  Requiring Server Name Indication
 
    Clients MUST NOT use an HTTPS RR response unless the client supports
    TLS Server Name Indication (SNI) and indicate the origin name when
@@ -1376,7 +1376,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Note that the TLS SNI (and also the HTTP "Host" or ":authority") will
    indicate the origin, not the TargetName.
 
-7.5.  HTTP Strict Transport Security
+8.5.  HTTP Strict Transport Security
 
    By publishing a usable HTTPS RR, the server operator indicates that
    all useful HTTP resources on that origin are reachable over HTTPS,
@@ -1397,13 +1397,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 25]
+Schwartz, et al.           Expires 6 May 2021                  [Page 25]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    If an HTTPS RR query for this "https" URL returns any AliasMode HTTPS
-   RRs, or any compatible ServiceMode HTTPS RRs (see Section 6.5), the
+   RRs, or any compatible ServiceMode HTTPS RRs (see Section 7), the
    client SHOULD act as if it has received an HTTP "307 Temporary
    Redirect" redirect to this "https" URL.  (Receipt of an incompatible
    ServiceMode RR does not trigger the redirect behavior.)  Because
@@ -1417,7 +1417,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    secure transport, such as errors in certificate validation.  This
    aligns with Section 8.4 and Section 12.1 of [HSTS].
 
-7.6.  HTTP-based protocols
+8.6.  HTTP-based protocols
 
    All protocols employing "http://" or "https://" URLs SHOULD respect
    HTTPS RRs.  For example, clients that support HTTPS RRs and implement
@@ -1428,7 +1428,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    An HTTP-based protocol MAY define its own SVCB mapping.  Such
    mappings MAY be defined to take precedence over HTTPS RRs.
 
-8.  SVCB/HTTPS RR parameter for ECH configuration
+9.  SVCB/HTTPS RR parameter for ECH configuration
 
    The SVCB "echconfig" parameter is defined for conveying the ECH
    configuration of an alternative endpoint.  In wire format, the value
@@ -1453,12 +1453,12 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 26]
+Schwartz, et al.           Expires 6 May 2021                  [Page 26]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
-8.1.  Client behavior
+9.1.  Client behavior
 
    The general client behavior specified in Section 3 permits clients to
    retry connection with a less preferred alternative if the preferred
@@ -1469,21 +1469,19 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    establishment:
 
    1.  Perform connection establishment using HTTPS RRs as described in
-       Section 3, but do not fall back to address records (steps 5 and
-       6).  If there are compatible HTTPS RRs, they all have an
-       "echconfig" key, and attempts to connect to them all fail,
-       terminate connection establishment.
+       Section 3.  After step 4, if there were compatible HTTPS RRs,
+       they all had an "echconfig" key, and attempts to connect to them
+       all failed, terminate connection establishment.
 
    2.  If the client implements Alt-Svc, try to connect using any
        entries from the Alt-Svc cache.
 
-   3.  Fall back to address records (steps 5 and 6 of Section 3) if
-       necessary.
+   3.  Continue connection establishment as in Section 3 if necessary.
 
    As a latency optimization, clients MAY prefetch DNS records for later
    steps before they are needed.
 
-8.2.  Deployment considerations
+9.2.  Deployment considerations
 
    An HTTPS RRSet containing some RRs with "echconfig" and some without
    is vulnerable to a downgrade attack.  This configuration is NOT
@@ -1492,9 +1490,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    SvcPriority) than those without, in order to maximize the likelihood
    that ECH will be used in the absence of an active adversary.
 
-9.  Zone Structures
+10.  Zone Structures
 
-9.1.  Structuring zones for flexibility
+10.1.  Structuring zones for flexibility
 
    Each ServiceForm RRSet can only serve a single scheme.  The scheme is
    indicated by the owner name and the RR type.  For the generic SVCB RR
@@ -1504,22 +1502,19 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    of zone owners to choose names that satisfy this constraint when
    using aliases, including CNAME and AliasMode records.
 
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 27]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
-
    When using the generic SVCB RR type with aliasing, zone owners SHOULD
    choose alias target names that indicate the scheme in use (e.g.
    "foosvc.example.net" for "foo://" schemes).  This will help to avoid
    confusion when another scheme needs to be added to the configuration.
 
-9.2.  Structuring zones for performance
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 27]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
+
+10.2.  Structuring zones for performance
 
    To avoid a delay for clients using a nonconforming recursive
    resolver, domain owners SHOULD minimize the use of AliasMode records,
@@ -1538,9 +1533,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Domain owners SHOULD avoid using a TargetName that is below a DNAME,
    as this is likely unnecessary and makes responses slower and larger.
 
-9.3.  Examples
+10.3.  Examples
 
-9.3.1.  Protocol enhancements
+10.3.1.  Protocol enhancements
 
    Consider a simple zone of the form:
 
@@ -1557,18 +1552,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    also include other information (e.g. non-standard port, ECH
    configuration).
 
-9.3.2.  Apex aliasing
+10.3.2.  Apex aliasing
 
    Consider a zone that is using CNAME aliasing:
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 28]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
 
    $ORIGIN aliased.example. ; A zone that is using a hosting service
    ; Subdomain aliased to a high-performance server pool
@@ -1576,6 +1562,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    ; Apex domain on fixed IPs because CNAME is not allowed at the apex
    @                300 IN A     192.0.2.1
                         IN AAAA  2001:db8::1
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 28]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
 
    With HTTPS RRs, the owner of aliased.example could alias the apex by
    adding one additional record:
@@ -1592,7 +1585,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    as "https://www.aliased.example" and "https://aliased.example",
    respectively, and will validate TLS server certificates accordingly.
 
-9.3.3.  Parameter binding
+10.3.3.  Parameter binding
 
    Suppose that svc.example's default server pool supports HTTP/2, and
    it has deployed HTTP/3 on a new server pool with a different
@@ -1613,20 +1606,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    each server pool, so each server pool can have its own protocol, ECH
    configuration, etc.
 
-
-
-
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 29]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
-
-9.3.4.  Multi-CDN
+10.3.4.  Multi-CDN
 
    The HTTPS RR is intended to support HTTPS services operated by
    multiple independent entities, such as different Content Delivery
@@ -1638,6 +1618,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    This example shows such a configuration, with www.customer.example
    having different DNS responses to different queries, either over time
    or due to logic within the authoritative DNS server:
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 29]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
 
     ; This zone contains/returns different CNAME records
     ; at different points-in-time.  The RRset for "www" can
@@ -1674,14 +1661,6 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
     h3pool 300 IN A 192.0.2.3
                AAAA 2001:db8:192:7::3
 
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 30]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
-
     ; Resolutions following the customer.svc2.example
     ; path use these records.
     ; Note that this CDN only supports HTTP/2.
@@ -1695,6 +1674,14 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
     ; Resolutions following the customer.svc2.example
     ; path use these records.
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 30]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
+
     ; Note that this CDN has no HTTPS records
     ; and thus no ECH support.
     $ORIGIN svc3.example. ; domain operated by CDN 3
@@ -1726,25 +1713,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
       ipv6hint and ipv4hint will reduce the performance impact of this
       case.
 
-
-
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 31]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
-
    *  If not all CDNs publish HTTPS records, clients will sometimes
       receive NODATA for HTTPS queries (as with cdn3.svc3.example
       above), and thus no echconfig, but could receive A/AAAA records
       from a different CDN which does support ECH.  Clients will be
       unable to use ECH in this case.
 
-9.3.5.  Non-HTTPS uses
+10.3.5.  Non-HTTPS uses
 
    For services other than HTTPS, the SVCB RR and an Attrleaf label
    [Attrleaf] will be used.  For example, to reach an example resource
@@ -1754,10 +1729,19 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    _8765._baz.api.example.com. 7200 IN SVCB 0 svc4-baz.example.net.
 
+
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 31]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
+
    HTTPS RRs use similar Attrleaf labels if the origin contains a non-
    default port.
 
-10.  Interaction with other standards
+11.  Interaction with other standards
 
    This standard is intended to reduce connection latency and improve
    user privacy.  Server operators implementing this standard SHOULD
@@ -1777,22 +1761,13 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    entry in the IANA URI Schemes Registry [RFC7595].  The scheme SHOULD
    have a defined specification for use with SVCB.
 
-11.  Security Considerations
+12.  Security Considerations
 
    SVCB/HTTPS RRs are intended for distribution over untrusted channels,
    and clients are REQUIRED to verify that the alternative endpoint is
    authoritative for the service (similar to Section 2.1 of [AltSvc]).
    Therefore, DNSSEC signing and validation are OPTIONAL for publishing
    and using SVCB and HTTPS RRs.
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 32]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
 
    Clients MUST ensure that their DNS cache is partitioned for each
    local network, or flushed on network changes, to prevent a local
@@ -1806,10 +1781,18 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    often prevent resolution as well, even when the client and recursive
    resolver validate DNSSEC and use a secure transport.  These downgrade
    attacks can prevent the HTTPS upgrade provided by the HTTPS RR
-   (Section 7.5), and disable the encryption enabled by the echconfig
-   SvcParamKey (Section 8).  To prevent downgrades, Section 3.1
+   (Section 8.5), and disable the encryption enabled by the echconfig
+   SvcParamKey (Section 9).  To prevent downgrades, Section 3.1
    recommends that clients abandon the connection attempt when such an
    attack is detected.
+
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 32]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
 
    A hostile DNS intermediary might forge AliasForm "." records
    (Section 2.5.1) as a way to block clients from accessing particular
@@ -1818,7 +1801,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    particular protocols or ports within a domain.  Clients that might be
    subject to such attacks SHOULD ignore AliasForm "." records.
 
-12.  Privacy Considerations
+13.  Privacy Considerations
 
    Standard address queries reveal the user's intent to access a
    particular domain.  This information is visible to the recursive
@@ -1828,9 +1811,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    protocol.  This is not normally sensitive information, but it should
    be considered when adding SVCB support in a new context.
 
-13.  IANA Considerations
+14.  IANA Considerations
 
-13.1.  SVCB RRType
+14.1.  SVCB RRType
 
    This document defines a new DNS RR type, SVCB, whose value 64 has
    been allocated by IANA from the "Resource Record (RR) TYPEs"
@@ -1842,17 +1825,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    Meaning: General Purpose Service Endpoints
 
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 33]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
-
    Reference: This document
 
-13.2.  HTTPS RRType
+14.2.  HTTPS RRType
 
    This document defines a new DNS RR type, HTTPS, whose value 65 has
    been allocated by IANA from the "Resource Record (RR) TYPEs"
@@ -1866,7 +1841,16 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    Reference: This document
 
-13.3.  New registry for Service Parameters
+
+
+
+
+Schwartz, et al.           Expires 6 May 2021                  [Page 33]
+
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
+
+
+14.3.  New registry for Service Parameters
 
    The "Service Binding (SVCB) Parameter Registry" defines the namespace
    for parameters, including string representations and numeric
@@ -1875,7 +1859,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    ACTION: create and include a reference to this registry.
 
-13.3.1.  Procedure
+14.3.1.  Procedure
 
    A registration MUST include the following fields:
 
@@ -1889,22 +1873,6 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
    SvcParamKey entries to be added to this namespace have different
    policies ([RFC8126], Section 4) based on their range:
-
-
-
-
-
-
-
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 34]
-
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
-
 
                  +=============+=========================+
                  | Number      | IANA Policy             |
@@ -1925,7 +1893,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Apart from the initial contents, the SvcParamKey name MUST NOT start
    with "key".
 
-13.3.2.  Initial contents
+14.3.2.  Initial contents
 
    The "Service Binding (SVCB) Parameter Registry" shall initially be
    populated with the registrations below:
@@ -1933,33 +1901,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Schwartz, et al.           Expires 3 May 2021                  [Page 35]
+Schwartz, et al.           Expires 6 May 2021                  [Page 34]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    +=============+=================+======================+===========+
@@ -1995,7 +1939,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
                                  Table 2
 
-13.4.  Registry updates
+14.4.  Registry updates
 
    Per [RFC6895], please add the following entries to the data type
    range of the Resource Record (RR) TYPEs registry:
@@ -2013,9 +1957,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 36]
+Schwartz, et al.           Expires 6 May 2021                  [Page 35]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    Per [Attrleaf], please add the following entry to the DNS Underscore
@@ -2029,7 +1973,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
                                  Table 4
 
-14.  Acknowledgments and Related Proposals
+15.  Acknowledgments and Related Proposals
 
    There have been a wide range of proposed solutions over the years to
    the "CNAME at the Zone Apex" challenge proposed.  These include
@@ -2041,9 +1985,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
    Taylor, Dan McArdle, Brian Dickson, and others for their feedback and
    suggestions on this draft.
 
-15.  References
+16.  References
 
-15.1.  Normative References
+16.1.  Normative References
 
    [ALPN]     Friedl, S., Popov, A., Langley, A., and E. Stephan,
               "Transport Layer Security (TLS) Application-Layer Protocol
@@ -2069,9 +2013,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 37]
+Schwartz, et al.           Expires 6 May 2021                  [Page 36]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    [DoT]      Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
@@ -2125,9 +2069,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 38]
+Schwartz, et al.           Expires 6 May 2021                  [Page 37]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
@@ -2181,9 +2125,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 39]
+Schwartz, et al.           Expires 6 May 2021                  [Page 38]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    [WebSocket]
@@ -2191,7 +2135,7 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
               RFC 6455, DOI 10.17487/RFC6455, December 2011,
               <https://www.rfc-editor.org/info/rfc6455>.
 
-15.2.  Informative References
+16.2.  Informative References
 
    [AltSvc]   Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
@@ -2237,9 +2181,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 40]
+Schwartz, et al.           Expires 6 May 2021                  [Page 39]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 Appendix A.  Decoding text in zone files
@@ -2293,9 +2237,9 @@ A.1.  Decoding a value-list
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 41]
+Schwartz, et al.           Expires 6 May 2021                  [Page 40]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
    Value-list decoding either of these inputs would instead convert it
@@ -2349,9 +2293,9 @@ B.2.  Differences from the proposed HTTP record
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 42]
+Schwartz, et al.           Expires 6 May 2021                  [Page 41]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
 B.3.  Differences from the proposed ANAME record
@@ -2405,9 +2349,9 @@ Appendix C.  Change history
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 43]
+Schwartz, et al.           Expires 6 May 2021                  [Page 42]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
       -  Include allocated RR type numbers
@@ -2461,9 +2405,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 44]
+Schwartz, et al.           Expires 6 May 2021                  [Page 43]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
       -  Much more precise description of the intended ALPN behavior
@@ -2517,9 +2461,9 @@ Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 45]
+Schwartz, et al.           Expires 6 May 2021                  [Page 44]
 
-Internet-Draft         SVCB and HTTPS RRs for DNS           October 2020
+Internet-Draft         SVCB and HTTPS RRs for DNS          November 2020
 
 
       -  Replace "hq" with "h3".
@@ -2573,4 +2517,4 @@ Authors' Addresses
 
 
 
-Schwartz, et al.           Expires 3 May 2021                  [Page 46]
+Schwartz, et al.           Expires 6 May 2021                  [Page 45]
