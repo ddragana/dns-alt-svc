@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-30T14:44:59.640435+00:00",
+  "timestamp": "2020-11-02T15:44:10.126406+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -4733,7 +4733,7 @@
       "id": "MDU6SXNzdWU3MTE1NDM5MDA=",
       "title": "Make a clean break with the past",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/256",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "squarooticus",
       "authorAssociation": "NONE",
       "assignees": [
@@ -4742,8 +4742,8 @@
       "labels": [],
       "body": "To avoid the problem SSL/TLS had for years with ambiguity re: the CN in the presence of the SAN extension, you should clearly state somewhere that when SVCB is available for an authority endpoint, the legacy defaults (hostname on port 80/443) must never be used as a fallback or as part of a pool of options for the client. That, or explain clearly the justification for the current design choice.",
       "createdAt": "2020-09-30T00:12:27Z",
-      "updatedAt": "2020-10-23T20:21:07Z",
-      "closedAt": null,
+      "updatedAt": "2020-11-02T15:43:34Z",
+      "closedAt": "2020-11-02T15:43:34Z",
       "comments": [
         {
           "author": "bemasc",
@@ -4907,15 +4907,15 @@
       "id": "MDU6SXNzdWU3Mjk4OTE5NTA=",
       "title": "Update acknowledgements",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/273",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "We should take a pass through Acknowledgments and add in people who have been commenting and involved but who are not yet listed.  Partial list:\r\n\r\n* Mark Andrews\r\n* Emily Stark\r\n* Eric Orth\r\n* Kyle Rose\r\n* Craig Taylor\r\n* Dan McArdle\r\n\r\nWho else am I mising?  (Feel free to add yourself to this list.)",
       "createdAt": "2020-10-26T20:43:33Z",
-      "updatedAt": "2020-10-26T20:43:33Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-30T15:34:46Z",
+      "closedAt": "2020-10-30T15:34:46Z",
       "comments": []
     },
     {
@@ -19262,7 +19262,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk3MDMzODgx",
       "title": "Adjust fallback behavior",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/263",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -19271,17 +19271,19 @@
       "labels": [],
       "body": "Editorial changes only, to clarify the fallback sequence.\r\n\r\nFixes #256",
       "createdAt": "2020-10-02T17:13:57Z",
-      "updatedAt": "2020-10-30T03:13:18Z",
+      "updatedAt": "2020-11-02T15:43:34Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "cbad95cad8776df499e14a9e8bd86df07dbc11f0",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-fallback",
-      "headRefOid": "5afc6a6e9139325775e0fde00e20bf95336f9917",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6946673a91503ddafbb346b20ce182cbcc0569db",
+      "closedAt": "2020-11-02T15:43:34Z",
+      "mergedAt": "2020-11-02T15:43:34Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "56f5b907c6c639d0345c12bce68dd5aa48a6b8ce"
+      },
       "comments": [
         {
           "author": "bemasc",
@@ -19308,13 +19310,133 @@
               "originalPosition": 9,
               "body": "```suggestion\r\n5. At this point there are no usable ServiceMode records, either because $SVCB_QNAME has no SVCB records or because no SVCB records have acceptable parameters. In this case, clients SHALL connect to the\r\n```",
               "createdAt": "2020-10-30T03:07:56Z",
-              "updatedAt": "2020-10-30T03:13:18Z"
+              "updatedAt": "2020-10-30T15:56:15Z"
             },
             {
               "originalPosition": 5,
               "body": "```suggestion\r\n   If there are no usable ServiceMode records, clients MUST go to step 5.  If all attempts fail, clients SHOULD go to step 5 (except as noted in\r\n```",
               "createdAt": "2020-10-30T03:10:09Z",
-              "updatedAt": "2020-10-30T03:13:19Z"
+              "updatedAt": "2020-10-30T15:56:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzY4MDg0",
+          "commit": {
+            "abbreviatedOid": "ea0aaf9"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-30T15:16:31Z",
+          "updatedAt": "2020-10-30T15:16:31Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "OK, I incorporated a version of this change.",
+              "createdAt": "2020-10-30T15:16:31Z",
+              "updatedAt": "2020-10-30T15:56:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzY4NzEw",
+          "commit": {
+            "abbreviatedOid": "ea0aaf9"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-30T15:17:14Z",
+          "updatedAt": "2020-10-30T15:17:14Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"Usable\" is ambiguous here.  I expanded this section and moved to our notion of \"compatible\" records (which may not have existed yet when we last updated this text).",
+              "createdAt": "2020-10-30T15:17:14Z",
+              "updatedAt": "2020-10-30T15:56:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzkzOTI2",
+          "commit": {
+            "abbreviatedOid": "ea0aaf9"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-30T15:41:07Z",
+          "updatedAt": "2020-10-30T15:41:07Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "Should we rename this subsection from \"mandatory\" to \"ServiceMode RR compatibility and mandatory keys\" ?  That might be more descriptive?",
+              "createdAt": "2020-10-30T15:41:07Z",
+              "updatedAt": "2020-10-30T15:56:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzk1MzE4",
+          "commit": {
+            "abbreviatedOid": "ea0aaf9"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Looking good other than the minor remaining questions.",
+          "createdAt": "2020-10-30T15:42:41Z",
+          "updatedAt": "2020-10-30T15:43:01Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Should we clear on what it should do?  (eg, fail the connection?  or use the failed-to-validate SVCB response?   I assume the former, but a little ambiguous here.)",
+              "createdAt": "2020-10-30T15:42:41Z",
+              "updatedAt": "2020-10-30T15:56:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwODA3NjQ1",
+          "commit": {
+            "abbreviatedOid": "6946673"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-30T15:56:24Z",
+          "updatedAt": "2020-10-30T15:56:24Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "Done",
+              "createdAt": "2020-10-30T15:56:24Z",
+              "updatedAt": "2020-10-30T15:56:24Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwODA3Nzcw",
+          "commit": {
+            "abbreviatedOid": "6946673"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-30T15:56:32Z",
+          "updatedAt": "2020-10-30T15:56:33Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "OK, done",
+              "createdAt": "2020-10-30T15:56:32Z",
+              "updatedAt": "2020-10-30T15:56:33Z"
             }
           ]
         }
@@ -19883,24 +20005,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTEyNzMwMzkx",
       "title": "Update acknowledgements",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/277",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #273\r\n\r\n(It would be good for someone else to take a pass and add others as needed.\r\nShould we sort?  They are in no particular order.)",
       "createdAt": "2020-10-30T03:18:36Z",
-      "updatedAt": "2020-10-30T14:44:34Z",
+      "updatedAt": "2020-10-30T15:34:46Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "d6c150627b93268df59bd87c575fed6ec60d2608",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-ack-1",
       "headRefOid": "b9ff377189fc1988404011b28a4c31eccaad6ec2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-30T15:34:46Z",
+      "mergedAt": "2020-10-30T15:34:46Z",
+      "mergedBy": "enygren",
+      "mergeCommit": {
+        "oid": "f206e7b98f1a76b4dbde168e30191fe2470e031a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -19922,6 +20046,19 @@
               "updatedAt": "2020-10-30T14:44:34Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIwNzY3MDY0",
+          "commit": {
+            "abbreviatedOid": "b9ff377"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-30T15:15:18Z",
+          "updatedAt": "2020-10-30T15:15:18Z",
+          "comments": []
         }
       ]
     }
